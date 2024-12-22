@@ -1,0 +1,343 @@
+﻿@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.Project.ProjectRequestVM>
+@{
+   //ViewBag.Title = "Test Project Requests";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Test Project Requests</h4>
+                </div>
+                <div class="col-md-2 text-right">
+                    @if (@ViewBag.HasCreatePermission)
+                    {
+                        <a href="/ProjectRequest/Create" class="badge badge-success badge-shadow">Create New</a>
+                    }
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class ="table-responsive mt-2 green-card">
+                    <form action="Search" class="form-horizontal">
+                        <div class="col-md-12">
+                            <div class="row custom">
+                                <div class="form-group col-md-4">
+                                    <label for="inputOrganizationName">Project Name</label>
+                                    <input type="text" class="form-control" id="ProjectName" value="@ViewBag.ProjectName" name="ProjectName" placeholder="Enter Project Name">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="inputClientStatus">Project Type <span style="color:red;">*</span></label>
+                                    @Html.DropDownList("ProjectType", null, "Choose..", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputClientStatus">Requested By <span style="color:red;">*</span></label>
+                                    @Html.DropDownList("ClientId", null, "Choose..", htmlAttributes: new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="inputMobileNumber">Project Code</label>
+                                    <input type="text" class="form-control" id="ProjectCode" value="@ViewBag.ProjectCode" name="ProjectCode" placeholder="Enter Project Code">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputCreateTime">Request Date</label>
+                                    <input type="date" class="form-control" id="RequestDate" value="@ViewBag.RequestDate" name="RequestDate">
+                                </div>
+
+                                @*  <div class="form-group col-md-4">
+                                <label for="inputusertype">user type <span style="color:red;">*</span></label>
+                                @html.dropdownlist("usertypeid", null, "choose..", htmlattributes: new { @class = "form-control", @required = "required" })
+                                </div> *@
+                            </div>
+
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <button id="submit" class="btn btn-primary submit-btn pull-right btn-sm">Search</button>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="tableExport_filter" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Project ID</th>
+                                <th>Project Name</th>
+                                <th>Project Type</th>
+                                <th>Requested By</th>
+                                <th>Requested Date</th>
+                                <th>Approval Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int i = 1;
+                        }
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data.ProjectCode</td>
+                                        <td>@data.ProjectName</td>
+                                        <td>@data.ProjectType</td>
+                                        <td>@data.Client?.ClientName</td>
+                                        <td>@data.RequestDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@data.ProjectApprovalStatus</td>
+                                        <td>
+                                            <a onclick="getLogHistory(@data.Id)" class="btn btn-info btn-sm"><i class="fa fa-history" title="View Log History"></i></a>
+                                            <a onclick="getCommentHistory(@data.Id)" class="btn btn-info btn-sm"><i class="fa fa-comment" title="View Comment History"></i></a>
+                                            @if (ViewBag.HasEditDeletePermission)
+                                            {
+                                                @* <a href="/ProjectRequest/Edit?id=@data.Id&&returnUrl=/ProjectRequest/Index" class="btn btn-primary btn-sm">Edit</a> *@
+                                                @* <button onclick="showDeleteConfirmMessage(@data.Id)" class="btn btn-danger btn-sm">Delete</button> *@
+                                            }
+                                            <a href="/ProjectRequest/Details?id=@data.Id&backUrl=/ProjectRequest/Index" class="btn btn-success btn-sm">Details</a>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Project Log History Modal Start-->
+<div class="modal fade" id="logHistoryModal" tabindex="-1" role="dialog" aria-labelledby="logHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logHistoryModalLabel">Project Log History</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="logHistoryTableId" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Description</th>
+                                <th>Created By</th>
+                                <th>Created Date</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+<!-- Project Comment History Modal Start-->
+<div class="modal fade" id="commentHistoryModal" tabindex="-1" role="dialog" aria-labelledby="commentHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentHistoryModalLabel">Project Approval Process Comments </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="commentHistoryTableId" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Sender</th>
+                                <th>Receiver</th>
+                                <th>Comment</th>
+                                <th>Created Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableExport_filter').DataTable({
+            pageLength: 5
+        });
+        $('#logHistoryTableId').DataTable({
+            pageLength: 5
+        });
+        
+    });
+   
+
+    function showDeleteConfirmMessage(id) {
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this imaginary file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            var data = { 'id': id };
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/ProjectRequest/Delete",
+                data: data,
+                datatype: "json",
+                success: function (result) {
+                    console.log(result);
+                    var message = result.Message;
+                    var executionState = result.executionState;
+                    if (executionState != null) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        $(".confirm").on('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrown) {
+                    swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+                }
+            });
+        });
+    }
+    function getLogHistory(projectId) {
+        var data = { 'projectId': projectId };
+        $("#logHistoryModal").modal("show");
+        $.ajax({
+            type: "GET",
+            url: "/ProjectRequest/GetProjectLogHistoryById",
+            data: data,
+            cache: false,
+            dataType: 'json',
+            success: function (response) {
+                $('#logHistoryTableId').DataTable({
+                    "bDestroy": true,
+
+                    //"bServerSide": true,
+                    //"bProcessing": true,
+                    //"bSearchable": true,
+                    //"order": [[1, 'asc']],
+                    // "language": {
+                    //     "emptyTable": "No record found.",
+                    //     "processing":
+                    //         '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+                    // },
+                    data: response.Data,
+
+                    aoColumns: [
+                        {
+                            title: 'Sl',
+                            data: null,
+                            render: (data, type, row, meta) => (meta.row+1)
+                        },
+                        { mData: 'Description' },
+                        {
+                            render: (data, type, row, meta) => {
+                                return row.CreatedUserName;
+                            },
+                        },
+                        {
+                            render: (data, type, row, meta) => {
+                                return moment(row.CreatedAt).zone('+0600').format("DD-MMM-YYYY HH:mm");
+                            },
+                        },
+                        // {
+                        //     render: (data, type, row, meta) => {
+                        //         return moment(row.EndDate).format("DD-MM-YYYY");
+                        //     },
+                        // },
+                        // { mData: 'Location' },
+                        // {
+                        //     render: (data, type, row, meta) => {
+
+                        //         return "<a  href='/DepartmentalTraining/Edit?id=" + row.Id + " ' $ type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' class='btn btn-sm btn-primary'> Edit </a> <a href='/DepartmentalTraining/Details?id=" + row.Id + " ' class='btn btn-sm btn-info'>Details</a>  <button onclick='showDeleteConfirmMessage(" + row.Id + ")' class='btn btn-sm btn-danger'>Delete</button>"
+                        //     },
+                        // },
+                    ],
+                });
+            },
+            error: function () {
+                $(".loader").fadeOut("slow");
+                swal(
+                    'Unexpected',
+                    'Unknown error occurred',
+                    'error'
+                );
+            }
+        });
+    }
+
+    function getCommentHistory(projectId) {
+        var data = { 'projectId': projectId };
+        $("#commentHistoryModal").modal("show");
+        $.ajax({
+            type: "GET",
+            url: "/ProjectRequest/GetProjectCommentHistoryById",
+            data: data,
+            cache: false,
+            dataType: 'json',
+            success: function (response) {
+                $('#commentHistoryTableId').DataTable({
+                    "bDestroy": true,
+                    data: response.Data,
+                    aoColumns: [
+                        {
+                            title: 'Sl',
+                            data: null,
+                            render: (data, type, row, meta) => (meta.row + 1)
+                        },
+                        { mData: 'SenderName' },
+                        { mData: 'ReceiverName' },
+                        { mData: 'Remark' },
+                        {
+                            render: (data, type, row, meta) => {
+                                return moment(row.CreatedAt).zone('+0600').format("DD-MMM-YYYY HH:mm");
+                            },
+                        },
+                    ],
+                });
+            },
+            error: function () {
+                $(".loader").fadeOut("slow");
+                swal(
+                    'Unexpected',
+                    'Unknown error occurred',
+                    'error'
+                );
+            }
+        });
+    }
+   
+</script>

@@ -1,0 +1,305 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Archive.RegistrationArchiveVM
+
+@{
+    ViewBag.Title = "Create Archive";
+    var Message = ViewBag.Message;
+}
+
+<style>
+    .add-participant-container {
+        display: flex;
+        align-items: end;
+        gap: 8px;
+    }
+
+    
+    label.error {
+        color: red !important;
+    }
+
+    .participantMemberTableContainer {
+        display: none;
+    }
+
+        .participantMemberTableContainer:has(table tbody tr) {
+            display: table;
+        }
+
+    .row.custom > div {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .mybutton {
+        color: blue;
+        height: 34px;
+        margin-top: 8px;
+        width: 100%;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/RegistrationArchive/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Create Archive
+        </h4>
+        <button class="ml-auto reset btn btn-sm" onclick="window.location.reload()">
+            <svg class="rotate180z" width="16" height="16" viewBox="0 0 32 32">
+                <path d="M25.95 7.65l.005-.004c-.092-.11-.197-.206-.293-.312c-.184-.205-.367-.41-.563-.603c-.139-.136-.286-.262-.43-.391c-.183-.165-.366-.329-.558-.482c-.16-.128-.325-.247-.49-.367c-.192-.14-.385-.277-.585-.406a13.513 13.513 0 0 0-.533-.324q-.308-.179-.625-.341c-.184-.094-.37-.185-.56-.27c-.222-.1-.449-.191-.678-.28c-.19-.072-.378-.145-.571-.208c-.246-.082-.498-.15-.75-.217c-.186-.049-.368-.102-.556-.143c-.29-.063-.587-.107-.883-.15c-.16-.023-.315-.056-.476-.073A12.933 12.933 0 0 0 6 7.703V4H4v8h8v-2H6.811A10.961 10.961 0 0 1 16 5a11.111 11.111 0 0 1 1.189.067c.136.015.268.042.403.061c.25.037.501.075.746.128c.16.035.315.08.472.121c.213.057.425.114.633.183c.164.054.325.116.486.178c.193.074.384.15.57.235c.162.072.32.15.477.23q.268.136.526.286c.153.09.305.18.453.276c.168.11.33.224.492.342c.14.102.282.203.417.312c.162.13.316.268.47.406c.123.11.248.217.365.332c.167.164.323.338.479.512A10.993 10.993 0 1 1 5 16H3a13 13 0 1 0 22.95-8.35z" fill="currentColor" />
+            </svg>
+            Reset
+        </button>
+    </div>
+    <form id="MeetingForm" class="card-body">
+        <div class="p-2 green-card" style="border-radius: 5px;">
+            <div class="row custom create-meeting">
+                <div class="col-6 p-1">
+					@await Html.PartialAsync(
+					"~/Views/Shared/_ForestAdministration.cshtml",
+					(
+					ViewBag.ForestCircleId as SelectList,
+					ViewBag.ForestDivisionId as SelectList,
+					ViewBag.ForestRangeId as SelectList,
+					ViewBag.ForestBeatId as SelectList,
+					ViewBag.ForestFcvVcfId as SelectList
+					)
+					)
+                </div>
+
+                <div class="col-6 p-1">
+					@await Html.PartialAsync(
+					"~/Views/Shared/_CivilAdministration.cshtml",
+					(
+					ViewBag.DivisionId as SelectList,
+					ViewBag.DistrictId as SelectList,
+					ViewBag.UpazillaId as SelectList,
+					ViewBag.UnionId as SelectList
+					)
+					)
+                </div>
+            </div>
+
+           
+        </div>
+
+        <div class="p-2 custom green-card mt-2" style="border-radius: 5px;">
+            <fieldset class="p-2 col-12">
+                <legend class="float-none w-auto">Archive Information</legend>
+                <div class="row">
+                    <div class="col-12 pr-1">
+                        <div class="row">
+                            <div class="col-3 pr-1">
+                                <label>
+                                    Archive Name
+                                    <span style="color:red;">*</span>
+                                </label>
+                                <input type="text" id="@nameof(Model.ArchiveName)" name="@nameof(Model.ArchiveName)" placeholder="Enter Archive Name" required />
+                            </div>
+                              <div class="col-3 pl-1">
+                                <label>
+                                    Document Description
+                                    <span style="color:red;">*</span>
+                                </label>
+                                <input type="text" id="@nameof(Model.DocumentDescription)" name="@nameof(Model.DocumentDescription)" placeholder="Enter Document Description" required />
+                            </div>
+
+                            <div class="col-3 pr-1">
+                                <label>Upload Date<span style="color:red;">*</span></label>
+                                <input type="date" id="@nameof(Model.UploadDate)" name="@nameof(Model.UploadDate)" placeholder="Enter Upload Date" required />
+                            </div>
+
+                            <div class="col-3 pl-1" style="padding-right: 28px;">
+                                <label>Upload files<span style="color:red;">*</span></label>
+                                <button type="button" class="mybutton flex-grow-1 btn btn-sm" data-toggle="modal" data-target=".bd-example-modal-file" style="color: blue;margin-top: 0px;">
+                                    Upload files
+                                    <svg class="ml-1" width="15" height="20" viewBox="0 0 32 32">
+                                        <path fill="currentColor" d="m28.1 18.9l-15-15c-2.5-2.6-6.6-2.6-9.2-.1s-2.6 6.7 0 9.2l.1.1L6.8 16l1.4-1.4l-2.9-2.9c-1.7-1.7-1.7-4.6 0-6.3s4.6-1.8 6.3-.1l.1.1l14.9 14.9c1.8 1.7 1.8 4.6.1 6.3c-1.7 1.8-4.6 1.8-6.3.1l-.1-.1l-7.4-7.4c-1-1-.9-2.6 0-3.5c1-.9 2.5-.9 3.5 0l4.1 4.1l1.4-1.4l-4.2-4.2c-1.8-1.7-4.6-1.6-6.3.2c-1.6 1.7-1.6 4.4 0 6.2l7.5 7.5c2.5 2.6 6.6 2.6 9.2.1s2.6-6.7 0-9.3c0 .1 0 0 0 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                           
+
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+
+  
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">SL</th>
+                            <th scope="col">File Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileDataId">
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="d-flex justify-content-end px-4 py-2">
+        <button type="submit" id="SaveMeeting" class="btn btn-sm btn-green save">
+            Save
+        </button>
+    </div>
+
+   @* @await Html.PartialAsync("_AddParticipant")*@
+    @await Html.PartialAsync("_AddFiles", null)
+</div>
+
+<script>
+    var allParticipants = [];
+
+    $("#CloseModal").on("click", function () {
+        // clean up
+    });
+</script>
+
+<script>
+    const memberTypeName = "Member";
+    const beneficiaryTypeName = "Beneficiary";
+
+    $("#SaveMeeting").on("click", function () {
+        // Validate
+        $("#MeetingForm").validate({
+            rules: {
+                ArchiveName: "required",
+                DocumentDescription: "required",
+                UploadDate: "required"
+            }
+        });
+
+        var isFormValid = $("#MeetingForm").valid();
+        if (isFormValid == false) {
+            return;
+        }
+
+     
+
+        var meeting = {
+            ArchiveName: $("#ArchiveName").val(),
+            DocumentDescription: $("#DocumentDescription").val(),
+            UploadDate: $("#UploadDate").val(),
+
+            ForestCircleId: $(".create-meeting select[name=ForestCircleId]").val(),
+            ForestDivisionId: $(".create-meeting select[name=ForestDivisionId]").val(),
+            ForestRangeId: $(".create-meeting select[name=ForestRangeId]").val(),
+            ForestBeatId: $(".create-meeting select[name=ForestBeatId]").val(),
+            ForestFcvVcfId: $(".create-meeting select[name=ForestFcvVcfId]").val(),
+            DivisionId: $(".create-meeting select[name=DivisionId]").val(),
+            DistrictId: $(".create-meeting select[name=DistrictId]").val(),
+            UpazillaId: $(".create-meeting select[name=UpazillaId]").val(),
+            UnionId: $(".create-meeting select[name=UnionId]").val(),
+  
+            //MeetingTypeId: $("#MeetingTypeId").val(),
+        };
+
+        var formData = new FormData();
+
+        for (var key in meeting) {
+            var value = meeting[key];
+
+            if (Array.isArray(value)) {
+                formData.append(key, JSON.stringify(value));
+            } else {
+                formData.append(key, value);
+            }
+        }
+
+
+        $("#documentsList input[type=file]").each(function () {
+            var current = $(this);
+
+            if (current?.length && current.length > 0) {
+                formData.append("MeetingDocumentFiles[]", current[0].files[0]);
+            }
+        });
+
+   
+        $(".loader").fadeIn("slow");
+
+
+        $.ajax({
+            type: "POST",
+            url: "/RegistrationArchive/Create",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function (response) {
+                $(".loader").fadeOut("slow");
+
+                if (response.Success) {
+					window.location.href = response.RedirectUrl;
+                } else {
+                    swal(
+                        'Error',
+                        response.Message,
+                        'error'
+                    );
+                }
+            },
+            error: function () {
+                $(".loader").fadeOut("slow");
+
+                swal(
+                    'Unexpected',
+                    'Unknown error occurred',
+                    'error'
+                );
+            }
+        });
+
+        // Send data with Ajax
+    });
+</script>
+
+<script>
+    function makeIndex() {
+        var index = 1;
+        $("#participantMemberTable td.index").each(function () {
+            $(this).text(index++);
+        });
+    }
+</script>
+
+
+
+<script>
+    
+    $('#CloseModal').click(function () {
+        var documentFiles=null;
+        $('#fileDataId tr').remove();
+        var countSL = 1;
+
+        //alert('Does this work?');
+        $("#documentsList input[type=file]").each(function () {
+            var current = $(this);
+
+            if (current?.length && current.length > 0) {
+                var documentFiles = current[0].files[0];
+
+                $("#fileDataId").append(`<tr><td  style="height: 0px;">${countSL}</td><td style="height: 0px;">${documentFiles.name}</td></tr>`);
+            }
+            countSL++;
+        });
+    });
+
+</script>

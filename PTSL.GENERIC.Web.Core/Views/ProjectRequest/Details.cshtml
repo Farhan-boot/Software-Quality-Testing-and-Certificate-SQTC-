@@ -1,0 +1,322 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Project.ProjectRequestVM
+@using PTSL.GENERIC.Web.Core.Helper.Enum;
+@{
+    ViewBag.Title = "Details";
+    ViewBag.activeMenu = "Accepted Projects";
+}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+@* <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> *@
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+
+    .h5, h5 {
+        font-size: 0.7rem;
+    }
+
+    .card .card-body {
+        padding-top: 10px;
+        padding-bottom: 0px;
+    }
+
+    .timeline {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 20px;
+        justify-content: flex-start;
+        margin-top: -63px;
+    }
+
+    .state {
+        margin: 10px;
+        flex: 0 1 calc(25% - 20px); /* Adjust as needed for spacing */
+        text-align: center;
+        position: relative;
+    }
+
+        .state .card {
+            height: 60%;
+        }
+
+        .state:before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ccc;
+            z-index: -1;
+        }
+
+        .state:nth-child(4n+1):before {
+            left: 100%;
+        }
+
+        .state:nth-child(4n):before {
+            left: -100%;
+        }
+
+    .completed .card-body {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: midnightblue;
+    }
+
+    .not-completed .card-body {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #721c24;
+    }
+</style>
+
+<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+
+
+    ul.timeline {
+        list-style-type: none;
+        position: relative;
+    }
+
+        ul.timeline:before {
+            content: ' ';
+            background: #d4d9df;
+            display: inline-block;
+            position: absolute;
+            left: 29px;
+            width: 2px;
+            height: 97%;
+            z-index: 400;
+        }
+
+        ul.timeline > li {
+            margin: 20px 0;
+            padding-left: 7%;
+        }
+
+            ul.timeline > li.completed:before {
+                content: ' ';
+                background: white;
+                display: inline-block;
+                position: absolute;
+                border-radius: 50%;
+                border: 3px solid blue;
+                background-color: blue;
+                left: 20px;
+                width: 20px;
+                height: 20px;
+                z-index: 400;
+            }
+
+            ul.timeline > li.not-completed:before {
+                content: ' ';
+                background: white;
+                display: inline-block;
+                position: absolute;
+                border-radius: 50%;
+                border: 3px solid red;
+                background-color: red;
+                left: 20px;
+                width: 20px;
+                height: 20px;
+                z-index: 400;
+            }
+
+</style>
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="@ViewBag.backUrl" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Project Details
+        </h4>
+    </div>
+
+    <div class="card-body">
+        <div class="card-body">
+            <div class="card-body mt-2 gray-card">
+                <fieldset class="mb-4">
+                    <legend><b>Project Information</b></legend>
+                    <div class="row">
+                        @* <div class="col-md-12" style="padding-bottom:15px"> *@
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Project Code: <b>@Model?.ProjectCode</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Project Name: <b>@Model?.ProjectName</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">ProjectType: <b>@Model?.ProjectType</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Project Approval Status: <b>@Model?.ProjectApprovalStatus</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Project Description: <b>@Model.ProjectDescription</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Requested By: <b>@Model.Client.ClientName</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Request Date: <b>@Model.RequestDate.ToString("dd/MM/yyyy")</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @if (Model.RejectionComment != null)
+                            {
+                                <label style="font-size:15px;">Rejection Comment: <b>@Model.RejectionComment</b></label>
+
+                            }
+                        </div>
+                        @* </div> *@
+                    </div>
+                </fieldset>
+                <fieldset class="mb-4">
+                    <legend>Client Information</legend>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Client Name: <b>@Model?.Client.ClientName</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Organization Name: <b>@Model?.Client.OrganizationName</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Mobile No: <b>@Model?.Client.MobileNumber</b></label>
+                        </div>
+
+                    </div>
+                </fieldset>
+                <fieldset class="mb-4">
+                    <legend>Meeting Information</legend>
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px">
+                            @if (@Model.MeetingList is not null)
+                            {
+                                @foreach (var item in Model.MeetingList)
+                                {
+                                    <div class="form-group">
+                                        <label style="font-size:15px;">Meeting Title: @item.MeetingTitle <b></b></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="font-size:15px;">Meeting Agenda: <b>@item.MeetingAgenda</b></label>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @if (@item.MeetingFiles?.Count > 0)
+                                        {
+                                            <div class="form-group">
+                                                <label style="font-size:15px;">Remarks: <b>@item.Remarks</b></label>
+                                            </div>
+                                            @foreach (var Test in item.MeetingFiles)
+                                            {
+                                                <label style="font-size:15px;">File:</label>
+                                                <a class="d-block" target="_blank" href="@Test.FileNameUrl">Download Now</a>
+                                            }
+                                        }
+
+                                    </div>
+                                    <hr />
+                                }
+                            }
+
+
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="mb-4">
+                    <legend>Project's Document</legend>
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px">
+
+                            @foreach (var item in Model.documentsByTypeList)
+                            {
+                                <div class="form-group">
+                                    <label style="font-size:15px;">Document Purpose: @item.DocumentPurpose <b></b></label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size:15px;">Document Title: <b>@item.DocumentTitle</b></label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size:15px;">Document: <b><a class="d-block" target="_blank" href="@item.DoumentPath">Download now</a></b></label>
+                                </div>
+                                @* <div>
+                            <a class="d-block" target="_blank" href="@item.DoumentPath">@item.DoumentPath</a>
+                            </div> *@
+                                <hr />
+                            }
+
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="mb-4">
+                    <legend>Project's Stage Timeline</legend>
+                    <div class="row">
+                        <div class="container mt-5 mb-5">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="timeline">
+                                        @if (Model.projectStateLogList != null)
+                                        {
+                                            var lastStage = Model.projectStateLogList.LastOrDefault();
+                                            bool IsCurrentSate = false;
+                                            int count = 0;
+                                            @foreach (var state in @ViewBag.ProjectState)
+                                            {
+                                                var currentState = Model.projectStateLogList.Where(x => x.ProjectState == state).FirstOrDefault();
+                                                var cssClass = currentState != null ? "completed" : "not-completed";
+
+                                                if ((currentState != null && lastStage != null) && lastStage.ProjectState == currentState.ProjectState)
+                                                {
+                                                    IsCurrentSate = true;
+                                                }
+
+                                                <li class="@cssClass">
+                                                    <p> State Name: <a target="_blank" href="#">@state</a> @((IsCurrentSate && count == 0) ? "(Current Stage)" : (IsCurrentSate && count > 0) ? "(Pending)" : "") </p>
+                                                    <p> Executed At: <a href="#">@(currentState != null ? currentState.CreatedAt : null)</a></p>
+                                                    <p> Status: <i class="@(cssClass == "completed" ? "fa fa-check":"fa fa-times fa-x")" aria-hidden="true"></i> </p>
+                                                </li>
+
+                                                if (IsCurrentSate){ count = 1; }
+
+
+
+
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,543 @@
+﻿.main-section {
+    margin: 15px 0;
+}
+
+.part-two {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.part-two-left-box {
+    background: linear-gradient(66deg, #e9e6ce 0%, #97adb1 100%);
+    border-radius: 10px;
+    position: relative;
+    padding: 30px;
+}
+
+.box-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+    .box-content img {
+        width: 150px;
+    }
+
+.content-desc h4 {
+    margin: 0;
+    margin-bottom: 8px;
+    font-weight: 400;
+    font-size: 18px;
+    color: #1a1a1a;
+}
+
+.content-desc p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 25px;
+    color: #1a1a1a;
+}
+
+.part-two-left-box .shape-img {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+
+.test-calender-left-box {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    border-radius: 30px 10px;
+    padding: 20px 15px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: #f2f2f2;
+    margin-bottom: 20px;
+}
+
+.test-calender-left-box-content h6, p {
+    margin: 0;
+}
+
+.test-calender-left-box-content p {
+    font-weight: 600;
+    font-size: 14px;
+    color: #000;
+    white-space: nowrap;
+}
+
+.test-calender-left-box-content h6 {
+    font-weight: 600;
+    font-size: 20px;
+    color: #000;
+}
+
+.test-calender-left-box img {
+    width: 35px;
+}
+
+.test-calender {
+    display: flex;
+    gap: 30px;
+}
+
+.test-calender-left {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 26px;
+    grid-row-gap: 37px;
+}
+
+.blue-test {
+    background: #27538A;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))
+}
+
+.white-box-content h6, .white-box-content p {
+    color: #fff;
+}
+
+.test-calender-right {
+    border-radius: 10px;
+    background: #fbf7f4;
+    padding: 25px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.test-calender-meeting-header h6 {
+    font-weight: 700;
+    font-size: 16px;
+    color: #23262f;
+    margin: 0;
+}
+
+.test-calender-meeting-header a {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1d7d81;
+}
+
+.meeting-card {
+    background: #eee6e2;
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.meeting-logo {
+    width: 34px;
+    height: 34px;
+    font-weight: 700;
+    font-size: 12px;
+    color: #fff;
+    background: #465F85;
+    text-align: center;
+    line-height: 34px;
+    border-radius: 50%;
+}
+
+.meeting-desc h6 {
+    margin: 0;
+    margin-bottom: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    color: #23262f;
+}
+
+.project-statistics-header h6 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 0.01em;
+    text-transform: capitalize;
+    color: #000;
+}
+
+.project-statistics-header a {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1d7d81;
+}
+
+.meeting-desc p {
+    font-weight: 400;
+    font-size: 10px;
+    color: #708099;
+    margin: 0;
+}
+
+.test-calender-meeting-header {
+    margin-bottom: 20px;
+}
+
+.client-payment {
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: #fff;
+    border-radius: 10px;
+}
+
+    .client-payment h4 {
+        font-weight: 700;
+        font-size: 18px;
+        color: #212b36;
+        padding: 15px;
+    }
+
+.client-payment-thead {
+    text-align: center;
+    background: linear-gradient(180deg, #e5cdf5 0%, rgba(229, 205, 245, 0) 99.05%);
+}
+
+.client-img {
+    position: relative;
+}
+
+.client-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.client-img .img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.client-img .img-icon {
+    position: absolute;
+    bottom: -3px;
+    left: 32px;
+}
+
+.client-desc h6 {
+    font-weight: 600;
+    font-size: 14px;
+    color: #212b36;
+    margin: 0;
+}
+
+.client-desc p {
+    font-weight: 400;
+    font-size: 14px;
+    color: #637381;
+    margin: 0;
+}
+
+.date-top {
+    font-weight: 400;
+    font-size: 14px;
+    color: #212b36;
+}
+
+.date-bottom {
+    font-weight: 400;
+    font-size: 12px;
+    color: #637381;
+}
+
+.testing-type, .amount {
+    font-weight: 400;
+    font-size: 14px;
+    color: #212b36;
+}
+
+.status {
+    padding: 5px 15px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+    .status.paid {
+        color: #118d57;
+        background: rgba(34, 197, 94, 0.16);
+    }
+
+    .status.pending {
+        background: rgba(255, 86, 48, 0.16);
+        color: #b71d18;
+    }
+
+    .status.submitted {
+        background: rgba(255, 171, 0, 0.16);
+        color: #b76e00;
+    }
+
+    .status.review {
+        background: #eafbff;
+        color: #0090fe;
+    }
+
+.table td, .table th {
+    vertical-align: middle;
+}
+
+.requestsignining {
+    box-shadow: 0 4px 25px 0 rgba(109, 124, 137, 0.12);
+    background: #fff;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 26px;
+}
+
+.project-statistics, .task-summary, .project-overview {
+    border-radius: 10px;
+    padding: 25px;
+    /* background-color: #fff; */
+    margin-top: 20px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: #fff;
+}
+
+.project-statistics-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.projects-sts-content {
+    border: 1px solid #dfdbd8;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sts-content h6 {
+    font-weight: 500;
+    font-size: 16px;
+    color: #000;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.sts-content p {
+    font-weight: 500;
+    font-size: 12px;
+    color: #aeaeae;
+    margin: 0;
+}
+
+.project-statistics-header {
+    margin-bottom: 15px;
+}
+
+.project-statistics-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.avatar ul {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+    .avatar ul li {
+        list-style: none;
+        margin-left: -15px;
+    }
+
+        .avatar ul li img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+
+.avatartime {
+    border-radius: 4px;
+    background: #eee6e2;
+    font-weight: 500;
+    font-size: 12px;
+    color: #000;
+    padding: 5px 10px;
+}
+
+.task-summary-table thead {
+    background: #ebebeb;
+    border-radius: 20px;
+}
+
+    .task-summary-table thead tr th {
+        border: 0;
+        font-size: 10px;
+        color: #000;
+    }
+
+        .task-summary-table thead tr th:first-child {
+            border-top-left-radius: 30px;
+            border-bottom-left-radius: 30px;
+        }
+
+        .task-summary-table thead tr th:last-child {
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+.task-summary-table .status {
+    padding: 5px 15px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+    .task-summary-table .status.completed {
+        color: #118d57;
+        background: rgba(34, 197, 94, 0.16);
+    }
+
+    .task-summary-table .status.ongoing {
+        color: #11258d;
+        background: rgba(34, 60, 197, 0.16);
+    }
+
+    .task-summary-table .status.pending {
+        color: #b71d18;
+        background: rgba(255, 86, 48, 0.16);
+    }
+
+.task-summary-table .time {
+    font-size: 12px;
+}
+
+.task-summary-table tr td {
+    border-top: 0;
+    font-size: 10px;
+}
+
+.project-overview h2 {
+    font-weight: 600;
+    font-size: 20px;
+    color: #000;
+}
+
+.project-overview h6 {
+    font-weight: 600;
+    font-size: 14px;
+    color: #000;
+}
+
+
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 767.98px) {
+    .part-two-left-box, .test-calender-left-box, .client-payment, .test-calender-right {
+        margin-top: 30px;
+    }
+
+    .box-content {
+        flex-direction: column;
+    }
+
+    .projects-sts-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .test-calender-left-box {
+        margin-bottom: 0;
+    }
+
+    .client-info {
+        width: 150px;
+    }
+
+    .date-top, .testing-type {
+        width: 100px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .part-two-left-box, .test-calender-left-box, .client-payment, .test-calender-right {
+        margin-top: 30px;
+    }
+
+    .test-calender-left-box {
+        margin-bottom: 0;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .part-two-left-box, .test-calender-left-box, .client-payment, .test-calender-right {
+        margin-top: 30px;
+    }
+
+    .test-calender-left-box {
+        margin-bottom: 0;
+    }
+
+        .test-calender-left-box img {
+            width: 40px;
+        }
+
+    .test-calender-left-box-content h6 {
+        font-size: 18px;
+    }
+
+    .test-calender-left-box-content p {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1499.98px) {
+    .part-two-left-box, .test-calender-left-box, .client-payment, .test-calender-right {
+        margin-top: 30px;
+    }
+
+    .test-calender-left-box {
+        margin-bottom: 0;
+    }
+
+        .test-calender-left-box img {
+            width: 40px;
+        }
+
+    .test-calender-left-box-content h6 {
+        font-size: 18px;
+    }
+
+    .test-calender-left-box-content p, .test-calender-meeting-header h6, .test-calender-meeting-header a, .client-payment-thead th {
+        font-size: 12px;
+    }
+    .client-desc p{
+        font-size: 10px;
+    }
+    .content-desc p{
+        font-size: 16px;
+    }
+
+    .projects-sts-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .box-content{
+        flex-direction: column;
+    }
+}
+
+.task-summary-table th, .task-summary-table td, .client-payment th, .client-payment td {
+    white-space: nowrap;
+}
+
+.pr{
+    padding-right: 5px;
+}
+tbody{
+    background: transparent;
+}
+

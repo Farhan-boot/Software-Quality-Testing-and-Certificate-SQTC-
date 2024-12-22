@@ -1,0 +1,126 @@
+﻿@using PTSL.GENERIC.Web.Core.Helper.Enum.Capacity;
+@using PTSL.GENERIC.Web.Core.Helper.Enum;
+
+@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Archive.RegistrationArchiveVM
+
+@{
+    ViewBag.Title = "Archive Information Details";
+}
+
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/RegistrationArchive/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Archive Information Details
+        </h4>
+    </div>
+
+    <div class="card-body">
+        <div class="form-horizontal">
+            <fieldset>
+                <legend>Archive Information</legend>
+                <div class="form-group">
+                    <label style="font-size:15px;">Archive Name: <b>@Model.ArchiveName</b></label>
+                </div>
+                <div class="form-group">
+                    <label style="font-size:15px;">Upload Date: <b>@Model.UploadDate.Value.ToString("yyyy-MM-dd")</b></label>
+                </div>
+                <div class="form-group">
+                    <label style="font-size:15px;">Document Description: <b>@Model?.DocumentDescription</b></label>
+                </div>
+
+               @*  @if (@Model.ForestCircle != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Circle: <b>@Model.ForestCircle?.Name</b></label>
+                    </div>
+                }
+
+                @if (@Model.ForestDivision != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Division: <b>@Model.ForestDivision?.Name</b></label>
+                    </div>
+                }
+                @if (@Model.ForestRange != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Range: <b>@Model.ForestRange?.Name</b></label>
+                    </div>
+                }
+                @if (@Model.ForestBeat != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Beat: <b>@Model.ForestBeat?.Name</b></label>
+                    </div>
+                }
+                @if (@Model.ForestFcvVcf != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Fcv Vcf: <b>@Model.ForestFcvVcf?.Name</b></label>
+                    </div>
+                }
+                @if (@Model.District != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">District: <b>@Model.District?.Name</b></label>
+                    </div>
+                }
+                @if (@Model.Division != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">Division: <b>@Model.Division?.Name</b></label>
+                    </div>
+                }
+                @if (@Model.Upazilla != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">Upazilla: <b>@Model.Upazilla?.Name</b></label>
+                    </div>
+                }
+                @if (@Model.Union != null)
+                {
+                    <div class="form-group">
+                        <label style="font-size:15px;">Union: <b>@Model.Union?.Name</b></label>
+                    </div>
+                } *@
+              
+            </fieldset>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                @if (Model.RegistrationArchiveFiles != null && Model.RegistrationArchiveFiles.Count > 0)
+                {
+                    <h5 class="mt-4">Documents</h5>
+                    <div class="d-flex flex-wrap" style="gap: 5px;">
+                        <ul class="list-group">
+                            @foreach (var file in Model.RegistrationArchiveFiles.Where(x => x.IsDeleted == false))
+                            {
+                                <li class="list-group-item">
+                                    <a href="@file.DocumentUrl"><i class="fa fa-file-download mr-2"></i> @file.FileName</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

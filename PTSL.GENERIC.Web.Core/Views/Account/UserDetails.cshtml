@@ -1,0 +1,85 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.UserVM
+@{
+    ViewBag.Title = "Details";
+    ViewBag.activeMenu = "Users";
+}
+
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+</style>
+
+<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/Account/UserLists" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            User Details
+        </h4>
+    </div>
+
+    
+
+
+    <div class="card-body">
+        <div class="form-horizontal mt-2 gray-card">
+            <fieldset>
+                <legend>User Information</legend>
+                <div class="row">
+                    <div class="col-md-12" style="padding-bottom:15px">
+                        <div class="form-group">
+                            <label style="font-size:15px;">User Role: <b>@Model?.UserRole?.RoleName</b></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:15px;">User Full Name: <b>@Model?.FirstName @Model.LastName</b></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:15px;">First Name: <b>@Model?.FirstName</b></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:15px;">Last Name: <b>@Model?.LastName</b></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:15px;">User Email: <b>@Model?.UserEmail</b></label>
+                        </div>    
+                        <div class="form-group">
+                            <label style="font-size:15px;">User Name: <b>@Model?.UserName</b></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:15px;">Mobile No: <b>@Model?.UserPhone</b></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:15px;">Designation: <b>@Model?.Designation</b></label>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:15px;">Signature: <b><img style="height:40px;width:40px" src="@Model?.SignatureUrl?.ToString()" /></b></label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

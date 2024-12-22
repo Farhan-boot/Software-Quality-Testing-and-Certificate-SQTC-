@@ -1,0 +1,98 @@
+﻿
+<style>
+    .main-sidebar .sidebar-menu li a span{
+        font-size: 14px;
+    }
+</style>
+<div class="main-sidebar sidebar-style-2">
+    <aside id="sidebar-wrapper">
+        <div class="sidebar-brand">
+            <a href="/Home/index">
+                <img alt="image" src="~/img/hsqtclogo.jpg?v=1" class="header-logo" style="height: 44px; margin-right: 10px;" />
+                <span class="logo-name" style="font-size: 15px; letter-spacing: 1px;">SHQTC MODULE</span>
+            </a>
+        </div>
+
+        <ul id="main-menu" class="sidebar-menu">
+            <li class="dropdown @(ViewBag.activeMenu == "Dashboard" ? "active":"")">
+                <a href="/Home/Index" class="nav-link">
+                    <i class="fa fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+        </ul>
+        
+    </aside>
+</div>
+
+<script type="text/javascript">
+    var activeMenu = '@ViewBag.activeMenu';
+   
+    $.ajax({
+        url: '@Url.Action("RootMenue", "Home")',
+        type: 'GET',
+        success: function (res) {
+            if (res == "")
+            {
+                var url = '@Url.Action("Login","Login")';
+                window.location.href = url;
+            }
+
+            $("#nameDiv").html(res.UserName);
+            $("#groupDiv").html("User Group: "+res.GroupName);
+
+            var menuHtml = "";
+          
+            if (res.MenuList != null && res.MenuList.length > 0) {
+                for (var j = 0; j < res.MenuList.length; j++) {
+                   
+                    menuHtml += `<li class="dropdown ${res.MenuList[j].AccessList.some(item => (item.Mask).trim() === activeMenu) ? "active" : ""}" id="${j}">`;
+                    menuHtml += '<a href="#" class="menu-toggle nav-link has-dropdown">';
+                    menuHtml += '<i class="' + res.MenuList[j].ModuleIcon + '"></i>';
+                    menuHtml += '<span> ' + res.MenuList[j].ModuleName + '</span >';
+                    menuHtml += "</a>";
+
+                    menuHtml += '<ul class="dropdown-menu" id="' + j + 900 + '">';
+                    for (var i = 0; i < res.MenuList[j].AccessList.length; i++) {
+                       
+                        menuHtml += `<li id="${res.MenuList[j].AccessList[i].ControllerName}_${res.MenuList[j].AccessList[i].ActionName}" class=${ activeMenu == (res.MenuList[j].AccessList[i].Mask).trim() ? "active" : "" }>`;
+                        menuHtml += '<a href="' + '/' + res.MenuList[j].AccessList[i].ControllerName + '/' + res.MenuList[j].AccessList[i].ActionName + '" class="nav-link">';
+                        menuHtml += '<i class="fa fa-circle-o"></i> ' + res.MenuList[j].AccessList[i].Mask + '';
+
+                        menuHtml += '</a>';
+                        menuHtml += '</li>';
+                    }
+                    menuHtml += '</ul>';
+                    menuHtml += '</li>';
+                }
+            }
+
+            $("#main-menu").append(menuHtml);
+            // var report_menu = '<li class="treeview active" id="report"><a href="/Reports/Index"><i class="fa fa-tasks"></i><span> Reports</span><span class="pull-right-container"></span></a></li>';
+            // $("#main-menu").append(report_menu);
+            var newscript = document.createElement('script');
+            newscript.type = 'text/javascript';
+            newscript.async = true;
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(newscript);
+            LoadSidebar();
+        }
+    });
+
+    // $(document).ready(function () {
+    //     // Get the current URL path
+    //     var path = window.location.pathname;
+
+    //     // Remove active class from all menu items
+    //     $("#main-menu .active").removeClass("active");
+
+    //     // Find the menu item that matches the current URL and add the active class
+    //     $("#main-menu a").each(function () {
+    //         var href = $(this).attr("href");
+    //         if (href && path.startsWith(href)) {
+    //             $(this).closest("li").addClass("active");
+    //             $(this).parents(".dropdown").addClass("active");
+    //         }
+    //     });
+    // });
+
+</script>

@@ -1,0 +1,81 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.HardwareTestings.HardwareTestingVM
+@using PTSL.GENERIC.Web.Core.Helper.Enum;
+@{
+    ViewBag.Title = "Details";
+}
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+</style>
+<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/HardwareTesting/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Hardware Testing Details
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="card-body">
+            <div class="form-horizontal">
+                <fieldset class="mb-4">
+                    <legend><b>Hardware Testing Information</b></legend>
+                    <div class="row">
+                        @*
+                        <div class="col-md-12" style="padding-bottom:15px">
+                        *@
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Project: <b>@Model?.ProjectRequest?.ProjectName</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Task: <b>@Model?.TaskOfProject?.TaskTitle</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Test Item : <b>@Model?.TestScope?.TestItem</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Sub Item: <b>@Model?.SubItem</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">RequiredSpecification: <b>@Model?.RequiredSpecification</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">SpecificationAsPerContract: <b>@Model?.SpecificationAsPerContract</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">TestResult: <b>@Model?.TestResult</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Remarks: <b>@Model?.Remarks</b></label>
+                        </div>
+                        @*
+                        </div>
+                        *@
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

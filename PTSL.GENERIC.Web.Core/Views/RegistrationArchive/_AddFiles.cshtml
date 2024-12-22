@@ -1,0 +1,146 @@
+﻿@using PTSL.GENERIC.Web.Core.Helper.Enum;
+@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Archive.RegistrationArchiveVM
+
+<style>
+    #tabs li[aria-selected=true] a {
+        color: black;
+    }
+
+    .file_container {
+        position: relative;
+    }
+
+    .delete_file_button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        z-index: 5;
+        background: white;
+        padding: 2px;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        border: 1px solid gray;
+        color: red;
+    }
+</style>
+
+<div data-backdrop="static" data-keyboard="false" class="modal fade bd-example-modal-file" tabindex="-2" role="dialog" aria-labelledby="myFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width: calc(100vw - 100px);">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myFileModalLabel">Upload Document</h4>
+                <button id="CloseModal" type="button" class="close btn btn-primary btn-sm" data-dismiss="modal" aria-label="Close">
+                   @* <span aria-hidden="true">×</span>*@
+                   Add
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="tabs">
+                    <div id="Files">
+                        <div class="row">
+                            <div class="col-6">
+                                <h5>Add Documents</h5>
+                                <div id="documentsList">
+                                    <input type="file" class="form-control" accept="*" />
+                                </div>
+                                <button onclick="addNewDocumentButton()" class="btn btn-primary mt-2 btn-sm" type="button">Add More</button>
+
+                                @if (Model.RegistrationArchiveFiles != null && Model.RegistrationArchiveFiles.Count > 0)
+                                {
+                                    <h5 class="mt-4">Current Document</h5>
+                                    <div class="d-flex flex-wrap" style="gap: 5px;">
+                                        <ul class="list-group">
+                                            @foreach (var file in Model.RegistrationArchiveFiles.Where(x=>x.IsDeleted == false))
+                                            {
+                                                <li class="list-group-item" data-fileid="@file.Id">
+                                                    <input type="button" value="@file.FileName" onclick="window.location = '@file.DocumentUrl';">
+                                                    <button type="button" onclick="deleteFile(@file.Id)" class="btn btn-sm btn-danger">X</button>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $("#tabs").tabs();
+</script>
+
+<script>
+    function addNewImageButton() {
+        const imageFileElement = `
+                <input type="file" class="form-control mt-2" accept="image/*" />
+            `;
+
+        $("#imagesList").append(imageFileElement);
+    }
+
+    var countImageUi=1;
+    function addNewDocumentButton() {
+        const imageFileElement = `
+        <div class="row" data-uiId="${countImageUi}">
+                <div class="col-md-11"> <input type="file" class="form-control mt-2" accept="*" /></div>
+                <div class="col-md-1"> <button type="button" onclick="removeUiFile(${countImageUi})" class="btn btn-sm btn-danger mt-2" >X</button></div>
+        </div>     
+            `;
+
+        $("#documentsList").append(imageFileElement);
+
+        countImageUi++;
+    }
+
+
+    function removeUiFile(id) {
+        $("#documentsList").find(`[data-uiid=${id}]`).remove();
+    
+    }
+
+
+
+
+
+
+
+
+    function deleteFile(id) {
+        
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this item!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            $.ajax({
+                method: "GET",
+                url: `/RegistrationArchive/DeleteImageOrDocument/${id}`,
+            })
+                .done(function (data) {
+                    if (data.Success) {
+                        swal("Deleted!", "Item has been deleted.", "success");
+                        $(`[data-fileid=${id}]`).remove();
+                        deleteFileFromUi(id);
+
+                    } else {
+                        swal("Deleted Failed!", data.Message, "error");
+                    }
+                });
+        });
+    }
+</script>
+
+
+
+

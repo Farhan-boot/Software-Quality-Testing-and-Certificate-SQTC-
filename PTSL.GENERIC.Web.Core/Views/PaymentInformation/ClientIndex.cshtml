@@ -1,0 +1,312 @@
+﻿@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.ProjectPackageConfiguration.PaymentInformationVM>
+@{
+    ViewBag.Title = "Index";
+    ViewBag.activeMenu = "Payment Information";
+}
+<!--Modal Start-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create New Reconciliation</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row custom">
+                        <div class="col-md-12">
+                            <div class="form-group" style="float: left;width: 100%;">
+                                <label for="inputMeetingType">Is Payment Disbursement</label>
+                                <input style="margin-top: -26px;margin-left: -34px;" type="checkbox" class="form-control" id="IsPaymentDisbursement" name="IsPaymentDisbursement" value="" placeholder="">
+                            </div>
+                        </div>
+                        <div id="IsPaymentDisbursementDivId" class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="inputMeetingType">Disbursement Date*</label>
+                                    <input type="date" class="form-control" id="DisbursementDate" name="DisbursementDate" value="" placeholder="Enter Disbursement Date">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="inputMeetingType">Disbursement Amount*</label>
+                                    <input type="text" class="form-control" id="DisbursementAmount" name="DisbursementAmount" value="" placeholder="Enter Disbursement Amount">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group" style="float: left;width: 100%;">
+                                <label for="inputMeetingType">Is Payment Release</label>
+                                <input style="margin-top: -26px;margin-left: 38px;" type="checkbox" class="form-control" id="IsPaymentRelease" name="IsPaymentRelease" value="" placeholder="">
+                            </div>
+                        </div>
+
+
+
+                        <div id="IsPaymentReleaseDivId" class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="inputMeetingType">Release Date*</label>
+                                    <input type="date" class="form-control" id="ReleaseDate" name="ReleaseDate" value="" placeholder="Enter Release Date">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="inputMeetingType">Release Amount*</label>
+                                    <input type="text" class="form-control" id="ReleaseAmount" name="ReleaseAmount" value="" placeholder="Enter Release Amount">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="" class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="inputMeetingType">Reconciliation Remark</label>
+                                    <input type="text" class="form-control" id="ReconciliationRemark" name="ReconciliationRemark" value="" placeholder="Enter Reconciliation Remark" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group" style="float: left;width: 100%;">
+                                    <label for="inputMeetingType">Is Payment Approved*</label>
+                                    <input style="margin-top: -26px;margin-left: -34px;" type="checkbox" class="form-control" id="IsPaymentApproved" name="IsPaymentApproved" value="" placeholder="">
+                                </div>
+                            </div>
+                           
+                            <input hidden type="text" class="form-control" id="PaymentInformationId" name="PaymentInformationId" value="">
+                            
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" id="SaveId" class="btn btn-primary submit-btn pull-right btn-sm">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal End-->
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Payment Information List</h4>
+                </div>
+                <div class="col-md-2 text-right">
+                    <a href="/PaymentInformation/Create" class="badge badge-success badge-shadow"><img src="/img/plus-vector.png">Add New</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="tableExport_filter" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                               @*  <th>Client Name</th> *@
+                                <th>Project</th>
+                                <th>Payment Amount</th>
+                                <th>Payment Method</th>
+                               @*  <th>Deposite Date</th> *@
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int i = 1;
+                        }
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        @* <td>@data?.PaymentCalculationHeader?.ProjectRequest?.Client?.ClientName</td> *@
+                                        <td>@data?.PaymentCalculationHeader?.ProjectRequest?.ProjectName (@data?.PaymentCalculationHeader?.ProjectRequest?.ProjectCode)</td>
+                                        <td>@data?.PaymentAmount</td>
+                                        <td>@data?.PaymentMethodEnumId.GetEnumDisplayName()</td>
+                                       @*  @if (data?.BankDepositeDate != null)
+                                        {
+                                            <td>@data?.BankDepositeDate</td>
+                                        }
+                                        @if (data?.ChequeDepositDate != null)
+                                        {
+                                            <td>@data?.ChequeDepositDate</td>
+                                        }
+                                        @if (data?.FromDepositDate != null)
+                                        {
+                                            <td>@data?.FromDepositDate</td>
+                                        } *@
+
+                                        <td>
+                                            @{
+                                                if (data.IsPaymentApproved == false)
+                                                {
+                                                    <a href="/PaymentInformation/Edit?id=@data.Id" class="btn btn-icon" title="Edit"><img src="~/img/edit.png" /></a>
+                                                    <button onclick="showDeleteConfirmMessage(@data.Id)" class="btn btn-icon" title="Delete"><img src="~/img/delete.png" /></button>
+                                                }
+                                             }
+                                            <a href="/PaymentInformation/Details?id=@data.Id" class="btn btn-icon" title="Details"><img src="~/img/view.png" /></a>
+                                           @*  <button type="button" onclick="PaymentInformation(@data.Id)" class="btn btn-icon" data-toggle="modal" data-target="#exampleModal" title="Reconciliation">
+                                                <img src="~/img/secure-payment.png" />
+                                            </button> *@
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableExport_filter').DataTable({
+            pageLength: 5
+        });
+    });
+    function showDeleteConfirmMessage(id) {
+       
+        swal({
+            title: "Are you sure?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            var data = { 'id': id };
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/PaymentInformation/Delete",
+                data: data,
+                datatype: "json",
+                success: function (result) {
+                    console.log(result);
+                    var message = result.Message;
+                    var executionState = result.executionState;
+                    if (executionState != null) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        $(".confirm").on('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrown) {
+                    swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+                }
+            });
+        });
+    }
+</script>
+
+<script>
+    $("#IsPaymentReleaseDivId").hide();
+    $("#IsPaymentDisbursementDivId").hide();
+    $("#IsPaymentDisbursement").mousedown(function () {
+        if (!$(this).is(':checked')) {
+            $("#IsPaymentDisbursementDivId").show();
+        }
+        else {
+            $("#IsPaymentDisbursementDivId").hide();
+        }
+    });
+    $("#IsPaymentRelease").mousedown(function () {
+        if (!$(this).is(':checked')) {
+            $("#IsPaymentReleaseDivId").show();
+        }
+        else {
+            $("#IsPaymentReleaseDivId").hide();
+        }
+    });
+</script>
+
+<script>
+   function PaymentInformation(id){
+       $("#PaymentInformationId").val(id);
+    //alert(id);
+    }
+
+    $("#SaveId").on("click", function () {
+        var paymentInformationId = Number($("#PaymentInformationId").val());
+
+        if ($("#IsPaymentDisbursement").is(':checked')) {
+            var isPaymentDisbursement = true;
+        }
+        else{
+            var isPaymentDisbursement = false;
+        }
+
+        var disbursementAmount = $("#DisbursementAmount").val();
+        var disbursementDate = $("#DisbursementDate").val();
+
+        //var isPaymentRelease = $("#IsPaymentRelease").val();
+        if ($("#IsPaymentRelease").is(':checked')) {
+            var isPaymentRelease = true;
+        }
+        else{
+            var isPaymentRelease = false;
+        }
+
+        var releaseDate = $("#ReleaseDate").val();
+        var releaseAmount = $("#ReleaseAmount").val();
+
+        var reconciliationRemark = $("#ReconciliationRemark").val();
+
+        //var isPaymentApproved = $("#IsPaymentApproved").val();
+        if ($("#IsPaymentApproved").is(':checked')) {
+            var isPaymentApproved = true;
+        }
+        else{
+            var isPaymentApproved = false;
+        }
+
+        var formData = new FormData();
+
+        formData.append('PaymentInformationId', paymentInformationId);
+        formData.append('IsPaymentDisbursement', isPaymentDisbursement);
+        formData.append('DisbursementAmount', disbursementAmount);
+        formData.append('DisbursementDate', disbursementDate);
+        formData.append('IsPaymentRelease', isPaymentRelease);
+        formData.append('ReleaseDate', releaseDate);
+        formData.append('ReleaseAmount', releaseAmount);
+        formData.append('ReconciliationRemark', reconciliationRemark);
+        formData.append('IsPaymentApproved', isPaymentApproved);
+
+        $.ajax({
+            type: "POST",
+            url: "/Reconciliation/Create",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function (response) {
+                if (response.Success == false) {
+                    alert("Reconciliation Panding Data Not Save!");
+                }
+                else {
+                    location.reload();
+                }
+            }
+        });
+
+
+    });
+
+
+</script>

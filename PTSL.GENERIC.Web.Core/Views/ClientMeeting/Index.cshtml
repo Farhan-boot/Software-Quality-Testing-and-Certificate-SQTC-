@@ -1,0 +1,116 @@
+﻿@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.Meetings.MeetingVM>
+@{
+    ViewBag.Title = "Index";
+    ViewBag.activeMenu = "Meeting Requests";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Client Meeting List</h4>
+                </div>
+                <div class="col-md-2 text-right">
+                    <a href="/ClientMeeting/Create" class="badge badge-success badge-shadow"><img src="/img/plus-vector.png">Add New</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="tableExport_filter" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Meeting Name</th>
+                                <th>Project</th>
+                                <th>Meeting Type</th>
+                                <th>MeetingStartTime</th>
+                                <th>Initiated By</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int i = 1;
+                        }
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data.MeetingTitle</td>
+                                        <td>@data.ProjectRequest?.ProjectName</td>
+                                        <td>@data.MeetingType?.MeetingTypeName</td>
+                                        <td>@data.MeetingStartTime</td>
+                                        <td>
+                                            @if (@data.IsInitiatedBySqtc == true)
+                                            {
+                                                <b>SHQTC</b>
+                                            }
+                                            else
+                                            {
+                                                <b>@ViewBag.ClientName</b>
+                                            }
+                                        </td>
+                                        <td>@data.MeetingStatus</td>
+                                        <td>
+                                            @* <a href="/Meeting/Edit?id=@data.Id" class="btn btn-primary btn-sm">Edit</a> *@
+                                            <a href="/ClientMeeting/Details?id=@data.Id&backUrl=/ClientMeeting/Index" class="btn btn-icon" title="Details"><img src="~/img/view.png" /></a>
+                                            @* <button onclick="showDeleteConfirmMessage(@data.Id)" class="btn btn-icon btn-sm" title="Delete"><img src="~/img/delete.png" /></button> *@
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableExport_filter').DataTable({
+            pageLength: 5
+        });
+    });
+    function showDeleteConfirmMessage(id) {
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this imaginary file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            var data = { 'id': id };
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/Meeting/Delete",
+                data: data,
+                datatype: "json",
+                success: function (result) {
+                    console.log(result);
+                    var message = result.Message;
+                    var executionState = result.executionState;
+                    if (executionState != null) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        $(".confirm").on('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrown) {
+                    swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+                }
+            });
+        });
+    }
+</script>

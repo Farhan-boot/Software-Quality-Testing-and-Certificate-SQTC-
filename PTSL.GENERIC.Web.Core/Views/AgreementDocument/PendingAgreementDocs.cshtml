@@ -1,0 +1,428 @@
+﻿@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.Documents.AllTypesOfDocumentVM>
+@using PTSL.GENERIC.Web.Core.Helper.Enum.Documents
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.activeMenu = "Pending Agreement Documents";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Pending Agreement Documents</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="tableExport_filter" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Project</th>
+                                <th>Document Type</th>
+                                <th>Testing Type</th>
+                                <th>Version No</th>
+                                <th>Created Date</th>
+                                <th>Approval Status</th>
+                                <th>Amendment Status</th>
+                                <th>Approval Message</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int i = 1;
+                        }
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data.ProjectRequest?.ProjectName</td>
+                                        <td>@data.DocumentType</td>
+                                        <td>@data.TestingType</td>
+                                        <td>@data.ViewVersionNo</td>
+                                        <td>
+                                            @data.CreatedAt.ToString("dd/MMM/yyyy hh:mm:ss")
+                                        </td>
+                                        <td>
+                                            @(data.DocumentApprovalStatus)
+                                        </td>
+                                        <td>@(data.DocumentAmendmentState == 0 ? "" : data.DocumentAmendmentState)</td>
+                                        <td>
+                                            @data.ApprovalMessage
+                                        </td>
+                                        <td style="width:12%">
+                                            <a href="@data.FilePath" class="btn btn-success" target="_blank"><i class="fa fa-file" title="View File"></i></a>
+                                            @if (data.HasEditAndDltPrmsn == true || data.DocumentAmendmentState == DocumentAmendmentState.Amendmented)
+                                            {
+                                                <a class="btn btn-icon" href="/AllTypesDocument/Edit/@data.Id" title="Edit Document" target="_blank"><img src="~/img/edit.png" /></a>
+                                            }
+
+                                            @if (data.IsApprovalShow || data.DocumentAmendmentState == DocumentAmendmentState.Amendmented)
+                                            {
+                                                <a onclick="openModalSet(@data.Id)" class="btn btn-success"> <i title="Forward to approval process" class="fa fa-forward"></i></a>
+                                            }
+                                            else if (!data.IsApprovalShow && data.IsAcceptOrReject)
+                                            {
+                                                <button onclick="Accept(@data.Id)" class="btn btn-icon" title="Accept document"><img src="~/img/check.png" /></button>
+                                                <button onclick="Reject(@data.Id)" class="btn btn-icon" title="Reject document"><img src="~/img/remove.png" /></button>
+                                                @* <button class="btn btn-primary btn-sm">Backword</button> *@
+                                            }
+
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Start-->
+<div class="modal fade" id="docApprovalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @* <h5 class="modal-title" id="exampleModalLabel">Permission Settings</h5> *@
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalDocumentId" />
+                <form id="documentApprovelForm" class="card-body card-primary">
+                    <div class="row  custom">
+                        <div class="col-12 p-1">
+                            <fieldset class="p-2">
+                                <legend class="float-none w-auto">Forward Document Request</legend>
+                                <div class="col-6" style="padding-left: 0px;float:left">
+                                    <label class="m-0">User Role Name <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="RoleName" name="RoleName" disabled>
+                                    <input type="hidden" class="form-control" id="RoleId" name="RoleId" disabled>
+                                    <input type="hidden" class="form-control" id="PermissionRowSettingsId" name="PermissionRowSettingsId" disabled>
+                                </div>
+                                <div class="col-6" style="padding-left: 0px;float:left">
+                                    <label class="m-0">Select User: <span style="color: red;">*</span></label>
+                                    <select id="UserIdDropdown" required>
+                                    </select>
+                                </div>
+
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row custom">
+                        <div class="col-12 p-1">
+                            <fieldset class="p-2">
+                                <div class="col-12" style="padding-left: 0px">
+                                    <label class="m-0">Remark</label>
+                                    <input class="form-control" type="text" id="RemarkId" name="RemarkId" placeholder="Enter Remark">
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                <button onclick="SaveMapToUser()" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+<!-- Project Comment History Modal Start-->
+<div class="modal fade" id="commentHistoryModal" tabindex="-1" role="dialog" aria-labelledby="commentHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentHistoryModalLabel">Document Approval Process Comments </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="commentHistoryTableId" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Sender</th>
+                                <th>Receiver</th>
+                                <th>Comment</th>
+                                <th>Created Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+<!-- Document Reject Comment  Modal Start-->
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentodalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logHistoryModalLabel">Reject the document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive mt-2 gray-card">
+                    <form action="Reject" method="post" id="commentModalData" form-horizontal">
+                        <input type="hidden" name="id" id="rejectDocId" value="" />
+
+                        <div class="col-md-12">
+                            <div class="row custom">
+                                <div class="form-group col-md-12">
+                                    <label for="inputOrganizationName">Rejection Comment</label>
+                                    <textarea type="text" class="form-control" id="RejectionComment" name="RejectionComment" placeholder="Enter Rejection Comment"> </textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-md-12">
+                            <button type="button" onclick="Rejection()" class="btn btn-primary submit-btn pull-right btn-sm">Reject</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableExport_filter').DataTable({
+            pageLength: 5
+        });
+        $("#ProjectRequestId").select2();
+        $("#TaskOfProjectId").select2();
+        // $("#AgreementDocumentSeverity").select2();
+        // $("#AgreementDocumentStatus").select2();
+    });
+    function openModalSet(id) {
+       
+        var id = parseInt(id);
+       
+        $.ajax({
+            type: "POST",
+            url: "/AgreementDocument/GetApprovalProcessModalData",
+            cache: false,
+            dataType: 'json',
+            data: { "id": id },
+            success: function (response) {
+               
+
+                $("#RoleName").val(response.Data.RoleName);
+                $("#RoleId").val(response.Data.RoleId);
+                $("#PermissionRowSettingsId").val(response.Data.PermissionRowSettingsId);
+
+                $("#UserIdDropdown > option").remove();
+                $("#UserIdDropdown").html('<option value="">Select User Name</option>');
+                $.each(response.Data.entity, function (id, option) {
+                    $("#UserIdDropdown").append($(`<option value='${option.Id}'>${option.UserName}</option>`));
+                });
+            },
+            error: function () {
+                $(".loader").fadeOut("slow");
+                swal(
+                    'Unexpected',
+                    'Unknown error occurred',
+                    'error'
+                );
+            }
+        });
+        $("#modalDocumentId").val(id);
+        $("#docApprovalModal").modal('show');
+
+    }
+    function SaveMapToUser() {
+       
+        if (!$("#documentApprovelForm").valid()) {
+            return;
+        }
+        var SenderRoleId = $("#RoleId").val();
+        var PermissionRowSettingsId = $("#PermissionRowSettingsId").val();
+        var receiverId = parseInt($("#UserIdDropdown").val());
+        var sendingDateId = $("#SendingDateId").val();
+        var sendingTimeId = $("#SendingTimeId").val();
+        var remarkId = $("#RemarkId").val();
+        var DocID = $("#modalDocumentId").val();
+        var ApprovalLogForClientReg = {
+            "SenderId": 0,
+            "SenderRoleId": SenderRoleId,
+            "PermissionRowSettingsId": PermissionRowSettingsId,
+            "ReceiverId": receiverId,
+            "SendingDate": sendingDateId,
+            "SendingTime": sendingTimeId,
+            "Remark": remarkId,
+            "AllTypesOfDocumentId": DocID
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/AgreementDocument/SaveAgreementDocApproval",
+            data: ApprovalLogForClientReg,
+            cache: false,
+            dataType: 'json',
+            success: function (response) {
+                alert("success");
+                window.location.href = "/AgreementDocument/PendingAgreementDocs";
+                //committeeDesignationId.append($('<option></option>').val("").html("Select Designation"));
+                //$.each(response.Entity, function (id, option) {
+                //    committeeDesignationId.append($('<option></option>').val(option.Id).html(option.Name));
+                //});
+            },
+            error: function () {
+                $(".loader").fadeOut("slow");
+                swal(
+                    'Unexpected',
+                    'Unknown error occurred',
+                    'error'
+                );
+            }
+        });
+
+    }
+
+    function Accept(id) {
+        swal({
+            title: "Are you sure?",
+            text: "You will accept the project!",
+            type: "success",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, Accept it!",
+            closeOnConfirm: false
+        },
+            function () {
+
+               
+                var data = { 'id': id };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/AgreementDocument/Accept",
+                    cache: false,
+                    data: data,
+                    dataType: 'json',
+                    success: function (response) {
+                        $(".loader").fadeOut("slow");
+                        swal(
+                            'Sucess',
+                            'Project Accepted Successfully',
+                            'success'
+                        );
+                        window.location.href = "/AgreementDocument/PendingAgreementDocs";
+                    },
+                    error: function () {
+                        $(".loader").fadeOut("slow");
+                        swal(
+                            'Unexpected',
+                            'Unknown error occurred',
+                            'error'
+                        );
+                    }
+                });
+            });
+
+    }
+
+    function Reject(id) {
+        $("#rejectDocId").val(id);
+        $("#commentModal").modal('show');
+    }
+
+    function Rejection() {
+       
+        $("#commentModalData").submit();
+    }
+    function showDeleteConfirmMessage(id) {
+        swal({
+            title: "Are you sure?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            var data = { 'id': id };
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/AgreementDocument/Delete",
+                data: data,
+                datatype: "json",
+                success: function (result) {
+                    console.log(result);
+                    var message = result.Message;
+                    var executionState = result.executionState;
+                    if (executionState != null) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        $(".confirm").on('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrown) {
+                    swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+                }
+            });
+        });
+    }
+</script>
+<script>
+    $("#ProjectRequestId").change(function () {
+       
+        var selectedItem = $(this).val();
+        var TaskList = $("#TaskOfProjectId");
+        if (selectedItem == "" || selectedItem == null) {
+            return true;
+        }
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Task/GetTaskListsByProJectId",
+            data: { "id": selectedItem },
+            success: function (data) {
+               
+                console.log(data);
+                TaskList.html('<option value="">Choose..</option>');
+                $.each(data, function (id, option) {
+                    TaskList.append($('<option></option>').val(option.Id).html(option.TaskTitle));
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve data.');
+            }
+        });
+    });
+</script>

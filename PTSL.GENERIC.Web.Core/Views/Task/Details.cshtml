@@ -1,0 +1,89 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Project.TaskVM
+@using PTSL.GENERIC.Web.Core.Helper.Enum;
+@{
+    ViewBag.Title = "Details";
+    ViewBag.activeMenu = "Tasks";
+}
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+</style>
+<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/Task/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Task Details
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="card-body">
+            <div class="card-body mt-2 gray-card">
+                <fieldset class="mb-4">
+                    <legend><b>Project Information</b></legend>
+                    <div class="row">
+                        @*
+                        <div class="col-md-12" style="padding-bottom:15px">
+                        *@
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Project: <b>@Model?.ProjectRequest?.ProjectName</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">TaskTitle: <b>@Model?.TaskTitle</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Task Priority: <b>@Model?.TaskPriority</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Task Type: <b>@Model?.TaskType?.TaskTypeName</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Task Description: <b>@Model?.TaskDescription</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Task Estimation Hour: <b>@Model?.TaskEstimationHour</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Task Deadline: <b>@Model?.TaskDeadline</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Total Due Time: <b>@Model?.TotalDueTime</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Total Tracked Time: <b>@Model?.TotalTrackedTime</b></label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-size:15px;">Task File: <b>@Model?.TaskFileName</b></label>
+                            <a class="d-block" target="_blank" href="@Model?.TaskFilePath">Download Now</a>
+                        </div>
+                        @*
+                        </div>
+                        *@
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

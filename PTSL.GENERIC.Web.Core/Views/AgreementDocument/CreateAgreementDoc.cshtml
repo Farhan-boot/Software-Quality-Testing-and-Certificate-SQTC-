@@ -1,0 +1,213 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Documents.AllTypesOfDocumentVM
+@{
+    ViewBag.Title = "Create";
+    var Message = ViewBag.Message;
+}
+@*<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+</style>*@
+<style>
+    .note-editable, .note-code {
+        background-color: white;
+        height: 310px; /* custom size */
+        min-height: 300px; /* custom size */
+        max-height: 300px !important; /* custom size */
+    }
+</style>
+
+<div class="card">
+    <link href="~/SummerNote/summernote.min.css" rel="stylesheet">
+    <div class="card-header">
+        <h4>
+            <a href="/AgreementDocument/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Create New Agreement Document
+        </h4>
+        @* <button class="ml-auto reset btn btn-sm" onclick="resetFromData('#AgreementDocumentForm')">
+            <svg class="rotate180z" width="16" height="16" viewBox="0 0 32 32">
+                <path d="M25.95 7.65l.005-.004c-.092-.11-.197-.206-.293-.312c-.184-.205-.367-.41-.563-.603c-.139-.136-.286-.262-.43-.391c-.183-.165-.366-.329-.558-.482c-.16-.128-.325-.247-.49-.367c-.192-.14-.385-.277-.585-.406a13.513 13.513 0 0 0-.533-.324q-.308-.179-.625-.341c-.184-.094-.37-.185-.56-.27c-.222-.1-.449-.191-.678-.28c-.19-.072-.378-.145-.571-.208c-.246-.082-.498-.15-.75-.217c-.186-.049-.368-.102-.556-.143c-.29-.063-.587-.107-.883-.15c-.16-.023-.315-.056-.476-.073A12.933 12.933 0 0 0 6 7.703V4H4v8h8v-2H6.811A10.961 10.961 0 0 1 16 5a11.111 11.111 0 0 1 1.189.067c.136.015.268.042.403.061c.25.037.501.075.746.128c.16.035.315.08.472.121c.213.057.425.114.633.183c.164.054.325.116.486.178c.193.074.384.15.57.235c.162.072.32.15.477.23q.268.136.526.286c.153.09.305.18.453.276c.168.11.33.224.492.342c.14.102.282.203.417.312c.162.13.316.268.47.406c.123.11.248.217.365.332c.167.164.323.338.479.512A10.993 10.993 0 1 1 5 16H3a13 13 0 1 0 22.95-8.35z" fill="currentColor" />
+            </svg>
+            Reset
+        </button> *@
+    </div>
+
+
+
+    <div class="card-body">
+        @* @using (Html.BeginForm("CreateDocument", "AllTypesDocument", FormMethod.Post, new { id = "" }))
+        { *@
+        <form id="AgreementDocumentForm" class="form-horizontal mt-2 gray-card">
+            <div class="">
+                <fieldset class="mb-4">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="m-0" style="font-size:15px;">Project <span style="color: red;">*</span></label>
+                            @Html.DropDownList("ProjectRequestId", null, "Choose Project", htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div>
+                        @* <div class="form-group col-md-4">
+                            <label class="m-0" style="font-size:15px;">Document Type <span style="color: red;">*</span></label>
+                            @Html.DropDownList("DocumentType", null, "Choose Document Type", htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div> *@
+                        <div class="form-group col-md-6">
+                            <label class="m-0" style="font-size:15px;">Testing Type <span style="color: red;">*</span></label>
+                            @Html.DropDownList("TestingType", null, "Choose Testing Type", htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label class="form-label" style="font-size:15px;" for="termsDescription">Content<span style="color:red">*</span></label>
+                            <textarea rows="50" class="summernote-content" @* cols="200" *@ style="height:300px" id="EditorContent" name="EditorContent" @* class="form-control" *@ required> </textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group col-md-12">
+                    <input type="hidden" id="fileName" />
+                    <input type="hidden" id="filePath" />
+                    <a class="btn btn-success pull-left btn-sm" onclick="ViewPdfFile()" target="_blank">View PDF</a>
+                    <button type="button" onclick="createDocument()" class="btn btn-primary submit-btn pull-right btn-sm">Submit</button>
+                </div>
+            </div>
+        </form>
+
+        @* } *@
+    </div>
+    <hr />
+    <div class="card-header pull-left">
+        <!-- <a href="/AgreementDocument/Index" class="btn btn-warning">Return to Index</a> -->
+    </div>
+</div>
+<script src="~/SummerNote/summernote.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#EditorContent").summernote();
+        GetDefaultDocByType();
+    });
+
+    function createDocument() {
+       
+        $(".loader").fadeIn("slow");
+        if (!$("#AgreementDocumentForm").valid()) {
+            $(".loader").fadeOut("slow");
+            return;
+        }
+        var projectId = $("#ProjectRequestId").val();
+        //var docTypeId = $("#DocumentType").val();
+        var testingType = $("#TestingType").val();
+        var editorContent = $("#EditorContent").summernote('code');
+        var fileName = $("#fileName").val();
+        var filePath = $("#filePath").val();
+        var model = {
+            ProjectRequestId: projectId,
+            DocumentType: 1,
+            TestingType: testingType,
+            EditorContent: editorContent,
+            FileName: fileName,
+            FilePath: filePath
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/AllTypesDocument/CreateDocument",
+            data: { "model": model },
+            // cache: false,
+            // contentType: false,
+            // processData: false,
+            dataType: 'json',
+            success: function (response) {
+               
+                $(".loader").fadeOut("slow");
+                if (response.success == true) {
+                    swal({
+                        title: "Success",
+                        text: response.message,
+                        type: "success"
+                    },
+                        function () {
+                            window.location.href = "/AgreementDocument/Index";
+                        }
+                    );
+                }
+                else {
+                    swal({
+                        title: "Error!!",
+                        text: response.message,
+                        type: "error"
+                    },
+                        //     function () {
+                        //         window.location.href = "/AllTypesDocument/Index";
+                        //     }
+                    );
+                }
+            }
+        });
+    }
+
+    function ViewPdfFile() {
+       
+        $(".loader").fadeIn("slow");
+        if (!$("#AgreementDocumentForm").valid()) {
+            $(".loader").fadeOut("slow");
+            return;
+        }
+        var projectId = $("#ProjectRequestId").val();
+        //var docTypeId = $("#DocumentType").val();
+        var testingType = $("#TestingType").val();
+        var editorContent = $("#EditorContent").summernote('code');
+
+        var model = {
+            ProjectRequestId: projectId,
+            DocumentType: 1,
+            TestingType: testingType,
+            EditorContent: editorContent,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/AllTypesDocument/ViewDocuemnt",
+            data: { "model": model },
+            // cache: false,
+            // contentType: false,
+            // processData: false,
+            dataType: 'json',
+            success: function (response) {
+               
+                $(".loader").fadeOut("slow");
+                $("#fileName").val(response.fileName);
+                $("#filePath").val(response.filePath);
+                window.open(
+                    response.url,
+                    '_blank' // <- This is what makes it open in a new tab.
+                );
+            }
+        });
+    }
+    function GetDefaultDocByType(){
+       
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/AgreementDocument/GetDefaultDocByType",
+            data: { "documentType": 1 },
+            success: function (data) {
+               
+                $(".summernote-content").summernote('code', data.Data);
+                
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve data.');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,419 @@
+﻿@using PTSL.GENERIC.Web.Core.Helper.Enum.Project
+@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.Project.TestScenarioVM>
+@{
+    ViewBag.Title = "Test Scenarios";
+    ViewBag.activeMenu = "Test Scenario";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Test Scenario List</h4>
+                </div>
+                <div class="col-md-2 text-right">
+                    <a href="/TestScenario/Create" class="badge badge-success badge-shadow"><img src="~/img/plus-vector.png" />Add New</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive mt-2 green-card">
+                    <form action="Search" class="form-horizontal">
+                        <div class="col-md-12 ">
+                            <div class="row custom">
+                                <div class="col-6 p-1">
+                                    <label class="m-0">Project <span style="color: red;"></span></label>
+                                    @Html.DropDownList("ProjectRequestId", null, "Choose Project", htmlAttributes: new { @class = "form-control col-md-12" })
+                                </div>
+                                <div class="col-6 pr-1" style="max-width: 245px;">
+                                    <label class="m-0">Test Scenario No <span style="color: red;"></span></label>
+                                    <input type="text" class="form-control col-md-12" id="TestScenarioNo" name="TestScenarioNo" value="@ViewBag.TestScenarioNo" placeholder="Enter Test Scenario No">
+                                </div>
+                                <div class="col-6 p-1">
+                                    <label class="m-0">Task Priority <span style="color: red;"></span></label>
+                                    @Html.DropDownList("TaskPriority", null, "Choose Priority", htmlAttributes: new { @class = "form-control col-md-12" })
+                                </div>
+                                <div class="col-6 pr-1" style="max-width: 245px;">
+                                    <label class="m-0">Planned Execution Date</label>
+                                    <input type="date" class="form-control col-md-12" id="PlannedExecutionDate" name="PlannedExecutionDate" value="@ViewBag.PlannedExecutionDate" placeholder="Enter Planned Execution Date">
+                                </div>
+                                <div class="col-6 pr-1" style="max-width: 245px;">
+                                    <label class="m-0">Actual Execution Date</label>
+                                    <input type="date" class="form-control col-md-12" id="ActualExecutionDate" name="ActualExecutionDate" value="@ViewBag.ActualExecutionDate" placeholder="Enter Actual Execution Date">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <button id="submit" class="btn btn-primary submit-btn pull-right btn-sm">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="testScenarioTableExport_filter" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Test Scenario No.</th>
+                                <th>Project No.</th>
+                                <th>Task No.</th>
+                                <th>User Type</th>
+                                <th>TC</th>
+                                <th>Priority</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int i = 1;
+                        }
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data.TestScenarioNo</td>
+                                        <td>@data.ProjectRequest?.ProjectCode</td>
+                                        <td>@data.TaskOfProject?.TaskId</td>
+                                        <td>@data.UserType</td>
+                                        <td>@data.TC</td>
+                                        <td>@data.TaskPriority</td>
+                                        <td>
+                                            <a onclick="getTestScenario(@data.Id)" class="btn btn-icon" title="Edit"><img src="~/img/edit.png" /></a>
+                                            <a href="/TestScenario/Details?id=@data.Id" class="btn btn-icon" title="Details"><img src="~/img/view.png" /></a>
+                                            <button onclick="showDeleteConfirmMessage(@data.Id)" class="btn btn-icon" title="Delete"><img src="~/img/delete.png" /></button>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Start-->
+<div class="modal fade" id="scenarioEditModal" tabindex="-1" role="dialog" aria-labelledby="scenarioEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scenarioEditModalLabel">Test Scenario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="taskId" />
+                <form id="TestScenarioForm" class="card-body card-primary @* mt-2 green-card *@">
+                    <div class="row p-1 custom ">
+                        <div class="p-2 col-12">
+                            <div class="row custom forest-location">
+                                <div class="col-6 p-1">
+                                    <label class="m-0">Project <span style="color: red;">*</span></label>
+                                    @Html.DropDownList("ProjectRequestId", null, "Choose Project", htmlAttributes: new { @class = "form-control col-md-12", @required = "required" })
+                                </div>
+                                <div class="col-6 p-1">
+                                    <label class="m-0">Task <span style="color: red;">*</span></label>
+                                    @Html.DropDownList("TaskOfProjectId", null, "Choose Task", htmlAttributes: new { @class = "form-control col-md-12", @required = "required" })
+                                </div>
+                            </div>
+
+                            <div class="row custom ">
+                                <div class="col-12 p-1">
+                                    <fieldset class="p-2">
+                                        <legend class="float-none w-auto">Test Scenario Details</legend>
+                                        <div class="row">
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">Module <span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control col-md-12" id="Module" name="Module" value="" placeholder="Enter Module Name" required>
+                                            </div>
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">User Type <span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control col-md-12" id="UserType" name="UserType" value="" placeholder="Enter User Type" required>
+                                            </div>
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">Sub Module <span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control col-md-12" id="SubModule" name="SubModule" value="" placeholder="Enter Sub Module" required>
+                                            </div>
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">Sub Module 1<span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control col-md-12" id="SubModule1" name="SubModule1" value="" placeholder="Enter Sub Module 1" required>
+                                            </div>
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">Sub Module 2<span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control col-md-12" id="SubModule2" name="SubModule2" value="" placeholder="Enter Sub Module 2" required>
+                                            </div>
+                                            <div class="col-8 pr-1" style="max-width: 500px;">
+                                                <label class="m-0">Test Scenario</label>
+                                                <textarea type="text" class="form-control col-md-12" id="TestScenario" name="TestScenario" value="" placeholder="Enter Test Scenario"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">TC<span style="color: red;">*</span></label>
+                                                <input type="number" class="form-control col-md-12" id="TC" name="TC" value="" placeholder="Enter TC" required>
+                                            </div>
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">POC<span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control col-md-12" id="POC" name="POC" value="" placeholder="Enter POC" required>
+                                            </div>
+                                            <div class="col-6 pr-1" style=" max-width: 245px;">
+                                                <label for="inputTaskStatusId">Task Priority<span style="color:red;">*</span></label>
+                                                @Html.DropDownList("TaskPriorityId", Html.GetEnumSelectList<TaskPriority>(), "Choose..", htmlAttributes: new { @class = "form-control", @required = "required" })
+                                            </div>
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">Planned Execution Date</label>
+                                                <input type="date" class="form-control col-md-12" id="PlannedExecutionDate" name="PlannedExecutionDate" placeholder="Enter Planned Execution Date">
+                                            </div>
+                                            <div class="col-6 pr-1" style="max-width: 245px;">
+                                                <label class="m-0">Actual Execution Date</label>
+                                                <input type="date" forma class="form-control col-md-12" id="ActualExecutionDate" name="ActualExecutionDate" placeholder="Enter Actual Execution Date">
+                                            </div>
+                                        </div>
+                                        @* <div class="row">
+                                            <div class="col-md-12">
+                                                <button style="background-color:forestgreen;float: right" class="btn btn-success btn-sm" type="button" onclick="updateTestScenario()">Update Test Scenario</button>
+                                            </div>
+                                        </div> *@
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                <button onclick="updateTestScenario()" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#testScenarioTableExport_filter').DataTable({
+            pageLength: 5
+        });
+        $('#TaskPriority').select2();
+        $('#ProjectRequestId').select2();
+        // $('#PlannedExecutionDate').datepicker({
+        //     autoclose: true,
+        //     timepicker: false,
+        //     format: 'mm/dd/yyyy',
+        // });
+    });
+    function showDeleteConfirmMessage(id) {
+        swal({
+            title: "Are you sure?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            var data = { 'id': id };
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/TestScenario/Delete",
+                data: data,
+                datatype: "json",
+                success: function (result) {
+                    console.log(result);
+                    var message = result.Message;
+                    var executionState = result.executionState;
+                    if (executionState != null) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        $(".confirm").on('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrown) {
+                    swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+                }
+            });
+        });
+    }
+
+    // function SetTaskIdWithRefresh(taskId) {
+    //     $("#taskId").val(taskId);
+    // }
+
+    function getTestScenario(id){
+        debugger
+        var data = { 'scenarioId': id };
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: "/TestScenario/GetTestScenarioById",
+            data: data,
+            datatype: "json",
+            success: function (result) {
+                debugger
+                if (result.Success == true) {
+                    var data = result.Data;
+                    $("#taskId").val(data.Id);
+
+                    $("#ProjectRequestId").val(data.ProjectRequestId);
+                    $("#ProjectRequestId").prop('disabled', true);
+                    onChangeProjectId(data.ProjectRequestId, data.TaskOfProjectId);
+                    $("#Module").val(data.Module);
+                    $("#UserType").val(data.UserType);
+                    $("#SubModule").val(data.SubModule);
+                    $("#SubModule1").val(data.SubModule1);
+                    $("#SubModule2").val(data.SubModule2);
+                    $("#TestScenario").val(data.ScenarioDescription);
+                    $("#TaskPriorityId").val(data.TaskPriority);
+                    //$("#TaskPriorityId :selected").text();
+                    $("#TC").val(data.TC);
+                    $("#POC").val(data.POC);
+                    if (data.PlannedExecutionDate != null) {
+                        var plannedDate = new Date(data.PlannedExecutionDate).toISOString().split('T')[0];
+                        $("#PlannedExecutionDate").val(plannedDate);
+                    }
+                    else{
+                        $("#PlannedExecutionDate").val("");
+                    }
+                    
+                    if (data.ActualExecutionDate != null) {
+                        var actualDate = new Date(data.ActualExecutionDate).toISOString().split('T')[0];
+                        $("#ActualExecutionDate").val(actualDate);
+                    }
+                    else {
+                        $("#ActualExecutionDate").val("");
+                    }
+                    
+                    $("#scenarioEditModal").modal('show');
+                }
+            },
+            error: function (xmlhttprequest, textstatus, errorthrown) {
+                // swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+            }
+        });
+    }
+
+    function onChangeProjectId(selectedItem, taskId) {
+        var TaskList = $("#TaskOfProjectId");
+        if (selectedItem == "" || selectedItem == null) {
+            return true;
+        }
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Task/GetTaskListsByProJectId",
+            data: { "id": selectedItem },
+            success: function (data) {
+               
+                console.log(data);
+                TaskList.html('<option value="">Choose..</option>');
+                $.each(data, function (id, option) {
+                    TaskList.append($('<option></option>').val(option.Id).html(option.TaskTitle));
+                });
+                $("#TaskOfProjectId").val(taskId);
+                $("#TaskOfProjectId").prop('disabled', true);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve data.');
+            }
+        });
+    }
+
+    $("#ProjectRequestId").change(function () {
+       
+        var selectedItem = $(this).val();
+        
+    });
+
+    function updateTestScenario(){
+       
+        if (!$("#TestScenarioForm").valid()) {
+            return;
+        }
+        var id = $("#taskId").val();
+        var projectName = $("#ProjectRequestId :selected").text();
+        var projectId = $("#ProjectRequestId").val();
+        var taskName = $("#TaskOfProjectId :selected").text();
+        var taskNameId = $("#TaskOfProjectId").val();
+        var Module = $("#Module").val();
+        var UserType = $("#UserType").val();
+        var SubModule = $("#SubModule").val();
+        var SubModule1 = $("#SubModule1").val();
+        var SubModule2 = $("#SubModule2").val();
+        var TestScenario = $("#TestScenario").val();
+        var TaskPriorityId = $("#TaskPriorityId").val();
+        var TaskPriorityName = $("#TaskPriorityId :selected").text();
+        var TC = $("#TC").val();
+        var POC = $("#POC").val();
+        var planExecDate = $("#PlannedExecutionDate").val();
+        var actualDate = $("#ActualExecutionDate").val();
+
+       var data = {
+            Id: id,
+            ProjectRequestId: projectId,
+            TaskOfProjectId: taskNameId,
+            Module: Module,
+            UserType: UserType,
+            SubModule: SubModule,
+            SubModule1: SubModule1,
+            SubModule2: SubModule2,
+            ScenarioDescription: TestScenario,
+            TC: TC,
+            POC: POC,
+            TaskPriority: TaskPriorityId,
+            PlannedExecutionDate: planExecDate,
+            ActualExecutionDate: actualDate,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/TestScenario/UpdateTestScenario",
+            data: data,
+            // cache: false,
+            // contentType: false,
+            // processData: false,
+            dataType: 'json',
+            success: function (response) {
+               
+                if (response.Success == true) {
+                    $("#scenarioEditModal").modal('hide');
+                    swal({
+                        title: "Success",
+                        text: response.Message,
+                        type: "success"
+                    },
+                        function () {
+                            window.location.href = "/TestScenario/Index";
+                        }
+                    );
+                }
+                else {
+                    swal({
+                        title: "Warning!!",
+                        text: response.Message,
+                        type: "warning"
+                    });
+                }
+                //location.reload();
+            }
+        });
+    }
+    
+</script>
+

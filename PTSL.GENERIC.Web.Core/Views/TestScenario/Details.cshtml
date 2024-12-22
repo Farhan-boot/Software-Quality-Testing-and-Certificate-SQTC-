@@ -1,0 +1,97 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Project.TestScenarioVM
+@using PTSL.GENERIC.Web.Core.Helper.Enum;
+@{
+    ViewBag.Title = "Details";
+    ViewBag.activeMenu = "Test Scenario";
+}
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+</style>
+<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/TestScenario/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Test Scenario Details
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="card-body">
+            <div class="card-body mt-2 gray-card">
+                <fieldset class="mb-4">
+                    <legend><b>Test Scenario Information</b></legend>
+                    <div class="row">
+                        @*
+                        <div class="col-md-12" style="padding-bottom:15px">
+                        *@
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Project: <b>@Model?.ProjectRequest?.ProjectName</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Task: <b>@Model?.TaskOfProject?.TaskTitle</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Test Scenario No : <b>@Model?.TestScenarioNo</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Module: <b>@Model?.Module</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">SubModule: <b>@Model?.SubModule</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Sub Module 1: <b>@Model?.SubModule1</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">SubModule 2: <b>@Model?.SubModule2</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Scenario Description: <b>@Model?.ScenarioDescription</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">TC: <b>@Model.TC</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">POC: <b>@Model.POC</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Planned ExecutionDate: <b>@Model.PlannedExecutionDate</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Task Priority: <b>@Model.TaskPriority</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Actual Execution Date: <b>@Model.ActualExecutionDate</b></label>
+                        </div>
+                        @*
+                        </div>
+                        *@
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

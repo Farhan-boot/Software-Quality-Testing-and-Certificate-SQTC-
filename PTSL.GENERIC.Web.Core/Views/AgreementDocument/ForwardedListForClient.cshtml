@@ -1,0 +1,295 @@
+﻿@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.Documents.AllTypesOfDocumentVM>
+@{
+    ViewBag.Title = "Index";
+    ViewBag.activeMenu = "Forwarded Agreement Documents";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Forwarded Agreement Documents</h4>
+                </div>
+                @*  <div class="col-md-2 text-right">
+                <a href="/AllTypesDocument/Create" class="badge badge-success badge-shadow">Create New</a>
+                </div> *@
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="tableExport_filter" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Project</th>
+                                <th>Document Type</th>
+                                <th>Testing Type</th>
+                                <th>Version No</th>
+                                <th>Created Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int i = 1;
+                        }
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data.ProjectRequest?.ProjectName</td>
+                                        <td>@data.DocumentType</td>
+                                        <td>@data.TestingType</td>
+                                        <td>@data.ViewVersionNo</td>
+                                        <td>
+                                            @data.CreatedAt.ToString("dd/MMM/yyyy hh:mm:ss")
+                                        </td>
+                                        <td style="width: 20%;">
+                                            @*  <a class="btn btn-primary" href="/AllTypesDocument/Edit/@data.Id"><i class="fa fa-edit" title="Edit Document"></i></a> *@
+                                            <a href="@data.FilePath" class="btn btn-icon" target="_blank" title="View File"><img src="~/img/view.png" /></a>
+
+                                            <a onclick="AcceptDocument(@data.Id)" class="btn btn-danger"><i class="fa fa-check-circle" title="Accept the document"></i></a>
+                                            <a onclick="OpenAmendmentModal(@data.Id)" class="btn btn-info"><i class="fa fa-adjust" title="Add Amendment"></i></a>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Document Amendment Modal Start-->
+<div class="modal fade" id="amendmentModal" tabindex="-1" role="dialog" aria-labelledby="commentodalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="amendmentModalLabel">Add Amendment for the document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive mt-2 green-card">
+                    <form method="post" name="AmendmentModalData" id="AmendmentModalData" form-horizontal">
+                        <input type="hidden" name="id" id="alltypeDocId" value="" />
+
+                        <div class="col-md-12">
+                            <div class="row custom">
+                                <div class="form-group col-md-12">
+                                    <label for="inputOrganizationName">Amendment Comment <span style="color:red">*</span></label>
+                                    <textarea rows="20" cols="200" style="height:500px;" type="text" class="form-control" id="AmendmentComment" name="AmendmentComment" placeholder="Enter Amendment Comment" required> </textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-md-12">
+                            <button type="button" onclick="CreateAmendment()" class="btn btn-primary pull-right btn-sm">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableExport_filter').DataTable({
+            pageLength: 5
+        });
+        $("#ProjectRequestId").select2();
+        $("#TaskOfProjectId").select2();
+        // $("#AgreementDocumentSeverity").select2();
+        // $("#AgreementDocumentStatus").select2();
+
+        $("#AmendmentModalData").validate({
+            rules: {
+                AmendmentComment: "required"
+            }
+        });
+    });
+
+    function OpenAmendmentModal(id) {
+        $("#alltypeDocId").val(id);
+        $("#amendmentModal").modal('show');
+    }
+
+    function CreateAmendment() {
+       
+        if (!$("#AmendmentModalData").valid()) {
+            return;
+        }
+        var comment = $("textarea#AmendmentComment").val();
+        if (comment == null || comment == undefined || comment == " ") {
+            swal({
+                title: "Required",
+                text: "Comment is required",
+                type: "error"
+            });
+            return;
+        }
+        else {
+            var model = {
+                AllTypesOfDocumentId: $("#alltypeDocId").val(),
+                AmendmentComment: $("textarea#AmendmentComment").val()
+            }
+
+            $(".loader").fadeIn("slow");
+            $.ajax({
+                type: "POST",
+                url: "/AllTypesDocument/CreateDocumentAmendment",
+                cache: false,
+                dataType: 'json',
+                data: { "entity": model },
+                success: function (response) {
+                   
+                    $(".loader").fadeOut("slow");
+                    if (response.success == true) {
+                        swal({
+                            title: "Amendment Added!",
+                            text: "Your amendment created successfully.",
+                            type: "success"
+                        },
+                            function () {
+                                window.location.reload();
+                            }
+                        );
+                    }
+                },
+                error: function () {
+                    $(".loader").fadeOut("slow");
+                    swal(
+                        'Unexpected',
+                        'Unknown error occurred',
+                        'error'
+                    );
+                }
+            });
+        }
+
+    }
+    function AcceptDocument(id) {
+
+        swal({
+            title: "Are you sure?",
+            text: "You will accept the document!",
+            type: "success",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, Accept it!",
+            closeOnConfirm: false
+        },
+            function () {
+                $(".loader").fadeIn("slow");
+               
+                var data = { 'id': id };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/AllTypesDocument/AcceptForwardedDocument",
+                    cache: false,
+                    data: data,
+                    dataType: 'json',
+                    success: function (response) {
+                        $(".loader").fadeOut("slow");
+                        if (response.success == true) {
+                            swal({
+                                title: "Success",
+                                text: response.Message,
+                                type: "success"
+                            },
+                                function () {
+                                    window.location.reload();
+                                }
+                            );
+                        }
+
+                    },
+                    error: function () {
+                        $(".loader").fadeOut("slow");
+                        swal(
+                            'Unexpected',
+                            'Unknown error occurred',
+                            'error'
+                        );
+                    }
+                });
+            });
+
+    }
+    // function showDeleteConfirmMessage(id) {
+    //     swal({
+    //         title: "Are you sure?",
+    //         text: "You will not be able to recover this imaginary file!",
+    //         type: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#DD6B55",
+    //         confirmButtonText: "Yes, delete it!",
+    //         closeOnConfirm: false
+    //     }, function () {
+    //         var data = { 'id': id };
+    //         $.ajax({
+    //             type: "GET",
+    //             contentType: "application/json; charset=utf-8",
+    //             url: "/AgreementDocument/Delete",
+    //             data: data,
+    //             datatype: "json",
+    //             success: function (result) {
+    //                 console.log(result);
+    //                 var message = result.Message;
+    //                 var executionState = result.executionState;
+    //                 if (executionState != null) {
+    //                     swal("Deleted!", "Your imaginary file has been deleted.", "success");
+    //                     $(".confirm").on('click', function () {
+    //                         window.location.reload();
+    //                     });
+    //                 }
+    //             },
+    //             error: function (xmlhttprequest, textstatus, errorthrown) {
+    //                 swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+    //             }
+    //         });
+    //     });
+    // }
+</script>
+<script>
+    $("#ProjectRequestId").change(function () {
+       
+        var selectedItem = $(this).val();
+        var TaskList = $("#TaskOfProjectId");
+        if (selectedItem == "" || selectedItem == null) {
+            return true;
+        }
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Task/GetTaskListsByProJectId",
+            data: { "id": selectedItem },
+            success: function (data) {
+               
+                console.log(data);
+                TaskList.html('<option value="">Choose..</option>');
+                $.each(data, function (id, option) {
+                    TaskList.append($('<option></option>').val(option.Id).html(option.TaskTitle));
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve data.');
+            }
+        });
+    });
+</script>

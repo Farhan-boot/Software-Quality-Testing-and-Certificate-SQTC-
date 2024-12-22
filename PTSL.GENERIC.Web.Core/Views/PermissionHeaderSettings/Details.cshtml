@@ -1,0 +1,113 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.PermissionSettings.PermissionHeaderSettingsVM
+@{
+    //ViewBag.Title = "Details";
+    ViewBag.activeMenu = "Approval Settings";
+}
+
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+</style>
+
+<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+</style>
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/PermissionHeaderSettings/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Permission Settings Details
+        </h4>
+    </div>
+
+
+    <div class="card-body">
+        <div class="form-horizontal mt-2 gray-card">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Module Information</h5>
+                    @*<div class="form-group">
+                        <label style="font-size:15px;">Forest Circles: <b>@Model?.ForestCircle?.Name</b></label>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Division: <b>@Model?.ForestDivision?.Name</b></label>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Range: <b>@Model?.ForestRange?.Name</b></label>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Beat: <b>@Model?.ForestBeat?.Name</b></label>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:15px;">Forest Fcv/Vcf: <b>@Model?.ForestFcvVcf?.Name</b></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="font-size:15px;">Role Name: <b>@Model?.UserRole?.RoleName</b></label>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:15px;">User Name: <b>@Model?.User?.UserName</b></label>
+                    </div>
+*@
+                    <div class="form-group">
+                        <label style="font-size:15px;">Module Name: <b>@Model.ModuleEnumId</b></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="form-horizontal mt-2 gray-card">
+            <fieldset style="padding-bottom: 10px;">
+                <legend>Assigning Authority Information</legend>
+                @if (Model?.PermissionRowSettings != null)
+                {
+
+                    @foreach (var member in Model.PermissionRowSettings.Where(x => x.IsDeleted == false))
+                    {
+                        <div style="border-bottom:1px solid black">
+                            <div class="form-group">
+                                <label style="font-size:15px;">Role Name: <b>@member?.UserRole?.RoleName</b></label>
+                            </div>
+                           @* <div class="form-group">
+                                <label style="font-size:15px;">Member Name: <b>@member?.User?.UserName</b></label>
+                            </div>
+                            *@
+                            <div class="form-group">
+                                <label style="font-size:15px;">Order No: <b>@member?.OrderId</b></label>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </fieldset>
+        </div>
+
+    </div>
+</div>

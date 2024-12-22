@@ -1,0 +1,83 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Meetings.MeetingVM
+@using PTSL.GENERIC.Web.Core.Helper.Enum;
+@{
+    ViewBag.Title = "Details";
+    ViewBag.activeMenu = "Meeting Requests";
+}
+
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+</style>
+
+<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="@ViewBag.BackUrl" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Client Meeting Details
+        </h4>
+    </div>
+
+    <div class="card-body">
+        <div class="card-body">
+            <div class="form-horizontal mt-2 gray-card">
+                <fieldset>
+                    <legend>User Information</legend>
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px">
+                            <div class="form-group">
+                                <label style="font-size:15px;">Project: <b>@Model?.ProjectRequest.ProjectName</b></label>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:15px;">Meeting Type: <b>@Model?.MeetingType.MeetingTypeName</b></label>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:15px;">Meeting Title: <b>@Model?.MeetingTitle</b></label>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:15px;">Agenda: <b>@Model.MeetingAgenda</b></label>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:15px;">Client user:</label>
+                                @foreach (var item in Model.AttendedUsers.Where(x => x.AttendUser.UserType == UserType.ClientAdmin || x.AttendUser.UserType == UserType.Client_User))
+                                {
+                                   <b> @item.AttendUser.UserName; </b>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:15px;">Sqtc user:</label>
+                                @foreach (var item in Model.AttendedUsers.Where(x => x.AttendUser.UserType == UserType.SQTC_User || x.AttendUser.UserType == UserType.SQTC_Admin))
+                                {
+                                    <b> @item.AttendUser.UserName;</b>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>

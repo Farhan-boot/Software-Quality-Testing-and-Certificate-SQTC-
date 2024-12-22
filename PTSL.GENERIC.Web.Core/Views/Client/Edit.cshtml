@@ -1,0 +1,109 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Sqtc_Client.ClientVM
+@{
+    ViewBag.Title = "Edit";
+    var Message = ViewBag.Message;
+    ViewBag.activeMenu = "Clients";
+}
+
+<div class="card">
+
+    <div class="card-header">
+        <h4>
+            <a href="/Client/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Edit Client
+        </h4>
+    </div>
+
+
+
+    <div style="padding-left: 15px; padding-right: 15px;">
+        @using (Html.BeginForm("Edit", "Client", FormMethod.Post, new { id = "ClientForm", enctype = "multipart/form-data", @class = "card-body mt-2 gray-card" }))
+        {
+            <input type="hidden" value="@Model.Id" name="Id" id="ModelId" />
+            <input type="hidden" value="@Model.CreatedAt" name="CreatedAt" id="CreatedAt" />
+            <input type="hidden" value="@Model.OfficialLetter" name="OfficialLetter" id="OfficialLetter" />
+            <input type="hidden" value="@Model.ClientApprovalStatus" name="ClientApprovalStatus" id="ClientApprovalStatus" />
+            <input type="hidden" value="@Model.ClientStatus" name="ClientStatus" id="ClientStatus" />
+            <input type="hidden" value="@Model.UserType" name="UserType" id="UserType" />
+            <input type="hidden" value="@Model.UserId" name="UserId" id="UserId" />
+            <div class="row p-1 custom">
+                <div class="col-md-12">
+                    <div class="row custom">
+
+                        <div class="form-group col-md-4">
+                            <label for="inputClient">Client Name <span style="color:red;">*</span></label>
+                            <input type="text" class="form-control" id="ClientName" name="ClientName" value="@Model.ClientName" placeholder="Enter Client Name" required>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="inputOrganizationName">Organization Name <span style="color:red;">*</span></label>
+                            <input type="text" class="form-control" id="OrganizationName" name="OrganizationName" value="@Model.OrganizationName" placeholder="Enter Organization Name" required>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="inputWorkingEmail">Working Email (Login Email) <span style="color:red;">*</span></label>
+                            <input type="email" class="form-control" id="WorkingEmail" name="WorkingEmail" value="@Model.WorkingEmail" placeholder="Enter Working Email" disabled required>
+                        </div>
+
+                        <div class="form-group col-md-4 px-1">
+                            <label for="inputOrganizationEmail">Organization Email <span style="color:red;">*</span></label>
+                            <input type="email" class="form-control" id="OrganizationEmail" name="OrganizationEmail" value="@Model.OrganizationEmail" placeholder="Enter Organization Email" required>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="inputDesignation">Designation <span style="color:red;">*</span></label>
+                            @Html.DropDownList("DesignationId", null, "Choose..", htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="inputMobileNumber">Mobile Number <span style="color:red;">*</span></label>
+                            <input type="number" class="form-control" id="MobileNumber" name="MobileNumber" value="@Model.MobileNumber" placeholder="Enter Mobile Number" required>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="inputUserName">UserName <span style="color:red;">*</span></label>
+                            <input type="text" class="form-control" id="UserName" name="UserName" placeholder="Enter UserName" value="@Model.UserName" required>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="inputPassword">Password <span style="color:red;">*</span></label>
+                            <input type="text" class="form-control" id="Password" name="Password" value="@Model.Password" placeholder="Enter Password" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-12">
+                    <button type="submit" class="btn btn-primary submit-btn pull-right btn-sm">Submit</button>
+                </div>
+            </div>
+        }
+    </div>
+    <hr />
+    <div class="card-header pull-left">
+        <!-- <a href="/Client/Index" class="btn btn-warning">Return to Index</a> -->
+    </div>
+</div>
+
+<script>
+    $(".submit-btn").on("click", function () {
+        if ($("#ClientForm").valid()) {
+            //Do something here
+            $(".loader").fadeIn("slow");
+        }
+    });
+
+    $("#ClientForm").validate({
+        // Specify validation rules
+        rules: {
+            ClientName: "required"
+        },
+
+    });
+
+
+</script>

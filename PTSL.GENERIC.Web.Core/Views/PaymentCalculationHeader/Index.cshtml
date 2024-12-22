@@ -1,0 +1,141 @@
+﻿@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.ProjectPackageConfiguration.PaymentCalculationHeaderVM>
+@{
+    ViewBag.Title = "Index";
+    ViewBag.activeMenu = "Payment Calculation";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Payment Calculation List</h4>
+                </div>
+                <div class="col-md-2 text-right">
+                    <a href="/PaymentCalculationHeader/Create" class="badge badge-success badge-shadow"><img src="/img/plus-vector.png">Add New</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form action="Search" class="form-horizontal">
+                        <div class="col-md-12">
+                            <div class="row custom">
+                                <div class="form-group col-md-4">
+                                    <label for="inputClientTypen">Project<span style="color:red;"></span></label>
+                                    @Html.DropDownList("ProjectRequestId", null, "Choose..", htmlAttributes: new { @class = "form-control", id = "ProjectRequestId" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputClientTypen">Task<span style="color:red;"></span></label>
+                                    @Html.DropDownList("TaskOfProjectId", null, "Choose..", htmlAttributes: new { @class = "form-control", id = "TaskOfProjectId" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputCreateTime">Created At</label>
+                                    <input type="date" class="form-control" id="CreatedAt" name="CreatedAt">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputClientTypen">User Name<span style="color:red;"></span></label>
+                                    @Html.DropDownList("UserNameId", null, "Choose..", htmlAttributes: new { @class = "form-control", id = "UserNameId" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <button id="submit" class="btn btn-primary submit-btn pull-right btn-sm">Search</button>
+                        </div>
+                    </form>
+                    <br />
+
+                    <table class="table table-striped table-bordered table-hover" id="tableExport_filter" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Project</th>
+                                <th>Task</th>
+                                <th>Grand Total</th>
+                                <th>Grand Total In Word</th>
+                                <th>Discount Amount</th>
+                                <th>Total</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int i = 1;
+                        }
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data?.ProjectRequest?.ProjectName (@data?.ProjectRequest?.ProjectCode)</td>
+                                        <td>@data?.TaskOfProject?.TaskTitle (@data?.TaskOfProject?.TaskId)</td>
+                                        <td>@data?.GrandTotal</td>
+                                        <td>@data?.GrandTotalInWord</td>
+                                        <td>@data?.DiscountAmount</td>
+                                        <td>@data?.NetTotal</td>
+                                        <td>@data?.CreatedAt.ToString("MM/dd/yyyy")</td>
+                                        <td>@data?.CreatedByName</td>
+                                        <td style="width: 20%;">
+                                            <a href="/PaymentCalculationHeader/ViewReport?id=@data.Id" class="btn btn-icon" title="View Report"><img src="~/img/report.png" /></a>
+                                            @* <a href="/PaymentCalculationHeader/Edit?id=@data.Id" class="btn btn-primary btn-sm">Edit</a>*@
+                                            <a href="/PaymentCalculationHeader/Details?id=@data.Id" class="btn btn-icon" title="Details"><img src="~/img/view.png" /></a>
+                                            <button onclick="showDeleteConfirmMessage(@data.Id)" class="btn btn-icon" title="Delete"><img src="~/img/delete.png" /></button>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableExport_filter').DataTable({
+            pageLength: 5
+        });
+    });
+    function showDeleteConfirmMessage(id) {
+       
+        swal({
+            title: "Are you sure?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            var data = { 'id': id };
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/PaymentCalculationHeader/Delete",
+                data: data,
+                datatype: "json",
+                success: function (result) {
+                    console.log(result);
+                    var message = result.Message;
+                    var executionState = result.executionState;
+                    if (executionState != null) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        $(".confirm").on('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrown) {
+                    swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+                }
+            });
+        });
+    }
+</script>

@@ -1,0 +1,392 @@
+﻿@using PTSL.GENERIC.Web.Core.Model
+@model LoginVM
+@{
+    var title = "Log In - SHQTC Project";
+    Layout = null;
+    var Message = TempData["Message"];
+}
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Software and Hardware Quality Testing and Certification (SHQTC) Center</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&amp;family=Roboto:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/external-template/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/external-template/assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/external-template/assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="~/external-template/assets/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="~/external-template/assets/css/style.css">
+    <style>
+        .register-section {
+            margin: 80px 0;
+        }
+
+        .resister-content {
+            border: 1px solid rgba(38, 85, 137, 1);
+            padding: 30px;
+            border-radius: 30px;
+        }
+
+            .resister-content h2 {
+                text-align: center;
+                font-size: 35px;
+                font-weight: 500;
+                margin-bottom: 30px;
+            }
+
+            .resister-content .form-control {
+                border: 1px solid #000;
+                background: transparent;
+            }
+
+        .select-option {
+            position: relative;
+        }
+
+            .select-option i {
+                position: absolute;
+                top: 54px;
+                background: transparent !important;
+                pointer-events: none;
+                color: #000;
+            }
+
+        .register-btn {
+            text-align: right;
+        }
+
+            .register-btn {
+                background: rgba(38, 85, 137, 1);
+                color: #fff !important;
+                font-weight: 700 !important;
+                border-radius: 30px !important;
+                font-size: 16px !important;
+                text-transform: uppercase !important;
+                padding: 6px 25px !important;
+            }
+
+        .login-btn {
+            background: rgba(36, 181, 116, 1) !important;
+            padding: 6px 20px !important;
+            border-radius: 30px !important;
+            color: #fff !important;
+            font-weight: 700 !important;
+            text-transform: capitalize !important;
+        }
+
+        .login-main {
+            padding: 60px 0;
+        }
+
+        .login-content h4{
+            font-size: 20px;
+        }
+
+        .login-content p, .login-content  ul li{
+            color: #000;
+        }
+
+            .login-content p{
+                text-align: justify;
+            }
+
+        .login-content ul li{
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        #login {
+            border: 1px solid rgba(38, 85, 137, 1);
+            padding: 15px 30px;
+            border-radius: 30px;
+        }
+
+        #login h2{
+            text-align: center;
+            font-size: 30px;
+        }
+
+        #login label span{
+            display: none;
+        }
+
+            #login #UserEmail {
+                margin-bottom: 15px;
+            }
+
+            #login label input{
+                border: 1px solid rgba(0, 0, 0, 0.42);
+                height: 45px;
+                border-radius: 10px;
+                background: #fff;
+            }
+
+        .forgot_pass{
+            font-weight: 700;
+        }
+
+        .login-buttons button{
+            width: 100%;
+            border-radius: 30px;
+            padding: 8px;
+            font-weight: 700;
+            background: #24b574;
+            color: #fff;
+            border: none;
+            margin-top: 15px;
+        }
+
+        .login-content {
+            margin-right: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header class="th-header header-layout1 onepage-nav">
+        <div class="sticky-wrapper">
+            <div class="menu-area">
+                <div class="container">
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col-auto">
+                            <div class="header-logo"><a class="icon-masking" href="#"><img src="~/external-template/assets/img/logo2.svg" alt="SHQTC"></a></div>
+                        </div>
+                        <div class="col-auto">
+                            <nav class="main-menu d-none d-lg-inline-block">
+                                <ul>
+                                    <li>
+                                        <a href="/">Home</a>
+                                    </li>
+
+                                    <li><a href="/Account/ExternalClientRegister" class="register-btn">Register</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+<div class="login-main">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="login-content">
+                        <h4>About</h4>
+                        <p>
+                            Software and Hardware Quality Testing and Certification (SHQTC) Center is the only international quality software and hardware testing center established by Bangladesh Computer Council (BCC). The SHQTC Center is playing a leading role in ensuring the quality of software and hardware used in the country and cyber/digital security for the public. The center was launched in 2016 and is being run under the Testing, Quality Control, and Certification Wing of BCC. The center has international certification of TMMi (Level-5), ISO/IEC-17025, ISO/IEC-15408 standards.
+                        </p>
+
+                        <h4>Services</h4>
+                        <ul>
+                            <li>Quality assurance of domestic and imported software and hardware</li>
+                            <li>Ensuring safe and risk-free use of software and hardware</li>
+                            <li>Ensuring acceptance of indigenous software and hardware in the international market</li>
+                            <li>Encouraging domestic institutions to test software and hardware.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div id="login">
+                        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "LoginForm", @class = "login-form" }))
+                        {
+                            <h2 class="login-header">Login to <br /> SHQTCMS</h2>
+
+                            @Html.AntiForgeryToken()
+                            if (ViewBag.ErrorMsg != null)
+                            {
+                                <div class="form-group">
+                                    <label style="color:red" for="email">Email or Password is invalid!</label>
+                                </div>
+                            }
+
+                            <label for="UserEmail">
+                                <span>Email Address</span>
+                                <input id="UserEmail" name="UserEmail" value="" type="text" placeholder="User Name" required />
+                            </label>
+                            <label for="UserPassword">
+                                <span>Password</span>
+                                <input id="UserPassword" name="UserPassword" value="" type="password" placeholder="Password" required />
+                            </label>
+                            <div class="forgot_pass">
+                                <a href="#">Forgot password?</a>
+                            </div>
+                            <div class="login-buttons">
+                                <div class="button-wrapper">
+                                    <button type="submit" id="submitBtn" onclick="submitHandler">Login</button>
+                                </div>
+                                
+                            </div>
+                            <div style="color:red;font-weight:bold" id="tempDataContainer"></div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+    <footer class="footer-wrapper footer-layout2">
+        <div class="widget-area">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-md-6 col-xxl-3 col-xl-4">
+                        <div class="widget footer-widget">
+                            <div class="th-widget-about">
+                                <div class="about-logo"><a href=""><img src="~/external-template/assets/img/logo.svg" alt=""></a></div>
+                                <!-- <p class="about-text"> SHQTC started in 2017
+                                    and currently it is running under the Testing, Quality Control, and Certification Wing of
+                                    Bangladesh Computer Council.</p> -->
+                                <div class="th-social"><a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a> <a href="https://www.twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a> <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a> <a href="https://www.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-auto">
+                        <div class="widget widget_nav_menu footer-widget">
+                            <h3 class="widget_title">Quick Links</h3>
+                            <div class="menu-all-pages-container">
+                                <ul class="menu">
+                                    <li><a href="">About Us</a></li>
+                                    <li><a href="">Pricing</a></li>
+                                    <li><a href="">Our Projects</a></li>
+                                    <li><a href="">Work With Us</a></li>
+                                    <li><a href="">Contact Us</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-auto">
+                        <div class="widget footer-widget">
+                            <h3 class="widget_title">Contact Us</h3>
+                            <div class="th-widget-contact">
+                                <div class="contact-feature">
+                                    <div class="icon-btn"><i class="fa-solid fa-phone"></i></div>
+                                    <div class="media-body">
+                                        <p class="contact-feature_label">Phone Number</p>
+                                        <a href="tel: +88-02 55006449" class="contact-feature_link"> +88-02 55006449</a>
+                                    </div>
+                                </div>
+                                <div class="contact-feature">
+                                    <div class="icon-btn"><i class="fa-solid fa-envelope"></i></div>
+                                    <div class="media-body">
+                                        <p class="contact-feature_label">Email address</p>
+                                        <a href="mailto:shqtc@bcc.gov.bd" class="contact-feature_link">shqtc@bcc.gov.bd</a>
+                                    </div>
+                                </div>
+                                <div class="contact-feature">
+                                    <div class="icon-btn"><i class="fa-solid fa-location-dot"></i></div>
+                                    <div class="media-body">
+                                        <p class="contact-feature_label">office location</p>
+                                        <a href="https://www.google.com/maps" class="contact-feature_link">13th, E-14/X, ICT Tower, Agargaon, Dhaka-1207 </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3">
+                        <div class="widget footer-widget">
+                            <h3 class="widget_title">Get in touch!</h3>
+                            <div class="newsletter-widget">
+                                <p class="footer-text">Subsrcibe to our upcoming latest article and news resources. Sign up today for hints. tips and the latest product news.</p>
+                                <form action="#" class="newsletter-form">
+                                    <div class="form-group"><input class="form-control" type="email" placeholder="Enter email address" required=""></div>
+                                    <button type="submit" class="icon-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-wrap bg-theme">
+            <div class="container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-lg-12 text-center">
+                        <p class="copyright-text">Copyright <i class="fal fa-copyright"></i> 2024 <a href="">SHQTC</a>. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="scroll-top">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;"></path>
+        </svg>
+    </div>
+
+    <script src="~/external-template/assets/js/vendor/jquery-3.7.1.min.js"></script>
+    <script src="~/external-template/assets/js/swiper-bundle.min.js"></script>
+    <script src="~/external-template/assets/js/bootstrap.min.js"></script>
+    <script src="~/external-template/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/external-template/assets/js/jquery.counterup.min.js"></script>
+    <script src="~/external-template/assets/js/circle-progress.js"></script>
+    <script src="~/external-template/assets/js/jquery-ui.min.js"></script>
+    <script src="~/external-template/assets/js/imagesloaded.pkgd.min.js"></script>
+    <script src="~/external-template/assets/js/isotope.pkgd.min.js"></script>
+    <script src="~/external-template/assets/js/tilt.jquery.min.js"></script>
+    <script src="~/external-template/assets/js/gsap.min.js"></script>
+    <script src="~/external-template/assets/js/ScrollTrigger.min.js"></script>
+    <script src="~/external-template/assets/js/smooth-scroll.js"></script>
+    <script src="~/external-template/assets/js/particles.min.js"></script>
+    <script src="~/external-template/assets/js/particles-config.js"></script>
+    <script src="~/external-template/assets/js/main.js"></script>
+
+    <script type="module">
+        import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.esm.browser.min.js';
+
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            scrollbar: {
+                el: '.swiper-scrollbar',
+            },
+
+            autoplay: {
+                delay: 4000,
+                pauseOnMouseEnter: false
+            }
+        });
+
+        document.getElementById("LoginForm").addEventListener("submit", function (e) {
+            const userEmail = document.getElementById("UserEmail").value;
+            const userPassword = document.getElementById("UserPassword").value;
+
+            if (!userEmail && !userPassword) {
+                e.preventDefault();
+                return;
+            }
+
+            document.getElementById("submitBtn").innerHTML = "Loggin in";
+        });
+
+        // Use Razor syntax to pass tempData to JavaScript
+        var tempDataFromServer = @Html.Raw(Json.Serialize(Message));
+
+        // Check if tempData is not null or undefined
+        if (tempDataFromServer) {
+            // Display tempData in a div
+            var tempDataContainer = document.getElementById('tempDataContainer');
+            tempDataContainer.textContent = tempDataFromServer;
+        }
+
+    </script>
+</body>
+</html>
+
+

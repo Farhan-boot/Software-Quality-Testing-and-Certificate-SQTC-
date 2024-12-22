@@ -1,0 +1,118 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Project.ProjectRequestVM
+
+@{
+    Layout = null;
+}
+
+@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <main style="position: relative;">
+        <img src="@(ViewBag.Url + "/img/shape-2.PNG")" alt="" style="position: fixed;top: 0;left: 0;">
+        <img src="@(ViewBag.Url + "/img/shape-3.PNG")" alt="" style="position: fixed;right: 0;bottom: 0;">
+        <div style="padding: 30px;">
+            <div style="text-align: right;font-size: 20px;font-weight: 700;margin-top: 40px;padding-right: 50px;">CXA201CS</div>
+            <div style="text-align: center;margin-top: 20px;"><img style="width: 200px;" src="@ViewBag.Url/img/bcc_logo.png" alt=""></div>
+            <div style="text-align: center;font-size: 16px;font-weight: 700;margin-top: 10px;">SOFTWARE AND HARDWARE QUALITY TESTING & <br> CERTIFICATION CENTER</div>
+            <div style="text-align: center;font-size: 18px;font-weight: 700;margin-top: 20px;letter-spacing: 2px;color: #000 !important;"><span style="font-size: 50px;color: #132F69;font-weight: 900;">CERTIFICATE</span> <br> OF TESTING QUALIFICATION</div>
+            <div style="text-align: center;font-size: 20px;font-weight: 500;margin-top: 20px;letter-spacing: 1px;">proudly awarded to :</div>
+            <div style="text-align: center;font-size: 25px;font-weight: 700;margin-top: 20px;">Department of Inspection for Factories <br> and Establishments</div>
+            <div>
+                <p style="width: 525px;text-align: justify; line-height: 25px; font-size: 20px; margin-top: 40px;margin-left: auto;margin-right: auto;">
+                    This is to certify that, as of <strong>
+                        @DateTime.Now.ToString("dd MMM yyyy"), @Model.ProjectName
+                    </strong> has passed
+                    the criteria for <strong>Functional, Security and Performance Testing</strong>
+                    from the <strong>SHQTC Center of Bangladesh Computer Council</strong>
+                </p>
+            </div>
+            <div style="text-align: center;margin: 30px 0;"><img style="width: 150px;" src="@ViewBag.Url/img/Capture.PNG" alt=""></div>
+            <div style="text-align: center;margin-bottom: 60px;">
+                <table style="width: 100%;">
+                    <tr style="vertical-align: top;">
+                        <td style="height: 100px;">
+                            <div><img style="height: 100px;" src="@ViewBag.Url/img/signature.PNG" alt=""></div>
+                            <div style="width: 250px; height: 2px; background-color: #000; margin: auto;"></div>
+                            <div style="font-size: 20px; font-weight: 700; margin: 10px 0 5px;">Director</div>
+                            <div style="font-size: 18px; font-weight: 500; margin-top: 5px;">Testing, Quality Control & Certification<br> <strong>Bangladesh Computer Council</strong></div>
+                        </td>
+                        <td style="height: 100px;">
+                            <div><img style="height: 100px;" src="@ViewBag.Url/img/signature-2.PNG" alt=""></div>
+                            <div style="width: 250px; height: 2px; background-color: #000; margin: auto;"></div>
+                            <div style="font-size: 20px; font-weight: 700; margin: 10px 0 5px;">Executive Director (Grade-1)</div>
+                            <div style="font-size: 18px; font-weight: 700;">Bangladesh Computer Council</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script type="text/javascript" nonce="">
+        document.body.onload = function () { document.body.offsetHeight; window.print() };
+    </script>
+</body>
+</html>
+
+ *@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <main style="position: relative;">
+        <img src="@(ViewBag.Url + "/img/shape-2.PNG")" alt="" style="position: fixed;top: 0;left: 0;">
+        <img src="@(ViewBag.Url + "/img/shape-3.PNG")" alt="" style="position: fixed;right: 0;bottom: 0;">
+        <div style="padding: 30px;">
+            <div style="text-align: right;font-size: 20px;font-weight: 700;margin-top: 20px;padding-right: 50px;">CXA201CS</div>
+            <div style="text-align: center;margin-top: 20px;"><img style="width: 200px;" src="@ViewBag.Url/img/bcc_logo.png" alt=""></div>
+            <div style="text-align: center;font-size: 16px;font-weight: 700;margin-top: 10px;">SOFTWARE AND HARDWARE QUALITY TESTING & <br> CERTIFICATION CENTER</div>
+            <div style="text-align: center;font-size: 18px;font-weight: 700;margin-top: 10px;letter-spacing: 2px;color: #000 !important;"><span style="font-size: 50px;color: #132F69;font-weight: 900;">CERTIFICATE</span> <br> OF TESTING QUALIFICATION</div>
+            <div style="text-align: center;font-size: 20px;font-weight: 500;margin-top: 15px;letter-spacing: 1px;">proudly awarded to :</div>
+            <div style="text-align: center;font-size: 25px;font-weight: 700;margin-top: 15px;">Department of Inspection for Factories <br> and Establishments</div>
+            <div>
+                <p style="width: 525px;text-align: justify; line-height: 25px; font-size: 20px; margin-top: 20px;margin-left: auto;margin-right: auto;">
+                    This is to certify that, as of <strong>
+                        @DateTime.Now.ToString("dd MMM yyyy"), @Model.ProjectName
+                    </strong> has passed
+                    the criteria for <strong>Functional, Security and Performance Testing</strong>
+                    from the <strong>SHQTC Center of Bangladesh Computer Council</strong>
+                </p>
+            </div>
+            <div style="text-align: center;margin: 20px 0;"><img style="width: 150px;" src="@ViewBag.Url/img/Capture.PNG" alt=""></div>
+            <div style="text-align: center;margin-bottom: 30px;">
+                <table style="width: 100%;">
+                    <tr style="vertical-align: top;">
+                        <td style="height: 100px;">
+                            <div><img style="height: 100px;" src="@ViewBag.Url/img/signature.PNG" alt=""></div>
+                            <div style="width: 250px; height: 2px; background-color: #000; margin: auto;"></div>
+                            <div style="font-size: 20px; font-weight: 700; margin: 10px 0 5px;">Director</div>
+                            <div style="font-size: 18px; font-weight: 500; margin-top: 5px;">Testing, Quality Control & Certification<br> <strong>Bangladesh Computer Council</strong></div>
+                        </td>
+                        <td style="height: 100px;">
+                            <div><img style="height: 100px;" src="@ViewBag.Url/img/signature-2.PNG" alt=""></div>
+                            <div style="width: 250px; height: 2px; background-color: #000; margin: auto;"></div>
+                            <div style="font-size: 20px; font-weight: 700; margin: 10px 0 5px;">Executive Director (Grade-1)</div>
+                            <div style="font-size: 18px; font-weight: 700;">Bangladesh Computer Council</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script type="text/javascript" nonce="">
+        document.body.onload = function () { document.body.offsetHeight; window.print() };
+    </script>
+</body>
+</html>

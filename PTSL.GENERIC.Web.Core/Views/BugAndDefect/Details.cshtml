@@ -1,0 +1,102 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.Project.BugAndDefectVM
+@using PTSL.GENERIC.Web.Core.Helper.Enum;
+@{
+    ViewBag.Title = "Details";
+    ViewBag.activeMenu = "Bugs and Defects";
+}
+<style>
+    fieldset {
+        padding: 0px 15px;
+        border: 1px solid gray;
+    }
+
+        fieldset legend {
+            width: auto;
+        }
+</style>
+<style>
+    input, select {
+        height: 30px !important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px !important;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/BugAndDefect/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Bug and Defect Details
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="card-body">
+            <div class="card-body mt-2 gray-card">
+                <fieldset class="mb-4">
+                    <legend><b>Bug and Defect Information</b></legend>
+                    <div class="row">
+                        @*
+                        <div class="col-md-12" style="padding-bottom:15px">
+                        *@
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Project: <b>@Model?.ProjectRequest?.ProjectName</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Task: <b>@Model?.TaskOfProject?.TaskTitle</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Test Case: <b>@Model?.TestCase?.TestCaseName</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Bugzilla Id: <b>@Model?.BugzillaId</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Bug And Defect Severity: <b>@Model?.BugAndDefectSeverity</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Bug And Defect Status: <b>@Model?.BugAndDefectStatus</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">ExpectedResult: <b>@Model?.ExpectedResult</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">ActualResult: <b>@Model?.ActualResult</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Resulation: <b>@Model.Resulation</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Defected Summary: <b>@Model.DefectedSummary</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Steps To Reproduce: <b>@Model.StepstoReproduce</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Reported Date: <b>@Model.ReportedDate</b></label>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="font-size:15px;">Files: </b></label>
+                            @foreach (var item in Model.BugAndDefectFiles)
+                            {
+                                <a class="d-block" target="_blank" href="@item.FileNameUrl">Download Now</a>
+
+                            }
+                        </div>
+                        @*
+                        </div>
+                        *@
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

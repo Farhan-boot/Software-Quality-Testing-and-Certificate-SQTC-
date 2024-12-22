@@ -1,0 +1,359 @@
+﻿@using PTSL.GENERIC.Web.Core.Helper.Enum;
+@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.Sqtc_Client.ClientVM>
+@{
+    //ViewBag.Title = "Client List";
+    ViewBag.activeMenu = "Clients";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Clients List</h4>
+                </div>
+                <div class="col-md-2 text-right">
+                    <a href="/Client/Create" class="badge badge-success badge-shadow"><img src="~/img/plus-vector.png" />Add New</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive mt-2 green-card">
+                    <form action="Search" class="form-horizontal">
+
+                        <div class="col-md-12">
+                            <div class="row custom">
+                                <div class="form-group col-md-4">
+                                    <label for="inputOrganizationName">Organization Name</label>
+                                    <input type="text" class="form-control" id="OrganizationName" value="@ViewBag.OrganizationName" name="OrganizationName" placeholder="Enter Organization Name">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="inputClientStatus">Client Status <span style="color:red;"></span></label>
+                                    @Html.DropDownList("ClientStatus", null, "Choose..", htmlAttributes: new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="inputMobileNumber">Mobile Number</label>
+                                    <input type="number" class="form-control" id="MobileNumber" value="@ViewBag.MobileNumber" name="MobileNumber" placeholder="Enter Mobile Number">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputCreateTime">Created At</label>
+                                    <input type="date" class="form-control" id="CreatedAt" value="@ViewBag.CreatedAt = CreatedAt;" name="CreatedAt">
+                                </div>
+
+                                @*  <div class="form-group col-md-4">
+                                <label for="inputusertype">user type <span style="color:red;">*</span></label>
+                                @html.dropdownlist("usertypeid", null, "choose..", htmlattributes: new { @class = "form-control", @required = "required" })
+                                </div> *@
+                            </div>
+
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <button id="submit" class="btn btn-primary submit-btn pull-right btn-sm">Search</button>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    <div class="card-body">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover" id="tableExport_filter" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>Organization Name</th>
+                            <th>Client Type</th>
+                            <th>Approval Status</th>
+                            <th>Mobile Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    @{
+                        int i = 1;
+                    }
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var data in Model)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@data.ClientName</td>
+                                    <td>@data.Designation?.Name</td>
+                                    <td>@data.OrganizationName</td>
+                                    <td>@data.ClientStatus</td>
+                                    <td>@data.ClientApprovalStatus</td>
+                                    <td>@data.MobileNumber</td>
+                                    <td>
+                                        @if (data.ClientApprovalStatus == ClientApprovalStatus.Accept)
+                                        {
+                                            
+                                        }
+                                        else
+                                        {
+                                            <a href="/Client/Edit?id=@data.Id" class="btn btn-icon"><img src="~/img/edit.png" /></a>
+                                        }
+
+                                        <a onclick="getLogHistory(@data.Id)" class="btn btn-info btn-sm"><i class="fa fa-history" title="View Log History"></i></a>
+                                        <a onclick="getCommentHistory(@data.Id)" class="btn btn-info btn-sm"><i class="fa fa-comment" title="View Comment History"></i></a>
+                                        <a href="/Client/Details?id=@data.Id&backUrl=/Client/Index" class="btn btn-icon" title="Details"><img src="~/img/view.png" /></a>
+
+
+                                        @* <button onclick="showDeleteConfirmMessage(@data.Id)" class="btn btn-danger btn-sm">Delete</button> *@
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Client Log History Modal Start-->
+<div class="modal fade" id="logHistoryModal" tabindex="-1" role="dialog" aria-labelledby="logHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logHistoryModalLabel">Client Log History</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="logHistoryTableId" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Description</th>
+                                <th>Created By</th>
+                                <th>Created Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+<!-- Client Comment History Modal Start-->
+<div class="modal fade" id="commentHistoryModal" tabindex="-1" role="dialog" aria-labelledby="commentHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentHistoryModalLabel">Client Comments </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="commentHistoryTableId" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Sender</th>
+                                <th>Receiver</th>
+                                <th>Comment</th>
+                                @* <th>Description</th> *@
+                                <th>Created Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableExport_filter').DataTable({
+            pageLength: 5
+        });
+    });
+
+    function SaveMapToUser() {
+        var receiverId = parseInt($("#ReceiverId").val());
+        var sendingDateId = $("#SendingDateId").val();
+        var sendingTimeId = $("#SendingTimeId").val();
+        var remarkId = $("#RemarkId").val();
+        var teamId = $("#cipTeamId").val();
+        var receiverRoleId = parseInt($("#UserRoleId").val());
+
+        var ApprovalLogForCfmVM = {
+            "SenderId": 0,
+            "SenderRoleId": 0,
+            "ReceiverId": receiverId,
+            "ReceiverRoleId": receiverRoleId,
+            "SendingDate": sendingDateId,
+            "SendingTime": sendingTimeId,
+            "CipId": teamId,
+            "Remark": remarkId
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Cip/SaveMapToUser",
+            data: ApprovalLogForCfmVM,
+            cache: false,
+            dataType: 'json',
+            success: function (response) {
+                alert("success");
+                window.location.href = "/CipTeam/Index";
+                //committeeDesignationId.append($('<option></option>').val("").html("Select Designation"));
+                //$.each(response.Entity, function (id, option) {
+                //    committeeDesignationId.append($('<option></option>').val(option.Id).html(option.Name));
+                //});
+            },
+            error: function () {
+                $(".loader").fadeOut("slow");
+                swal(
+                    'Unexpected',
+                    'Unknown error occurred',
+                    'error'
+                );
+            }
+        });
+    }
+    function getLogHistory(clientId) {
+            var data = { 'clientId': clientId };
+            $("#logHistoryModal").modal("show");
+            $.ajax({
+                type: "GET",
+                url: "/Client/GetClientLogHistoryById",
+                data: data,
+                cache: false,
+                dataType: 'json',
+                success: function (response) {
+                    $('#logHistoryTableId').DataTable({
+                        "bDestroy": true,
+                        data: response.Data,
+                        aoColumns: [
+                            {
+                                title: 'Sl',
+                                data: null,
+                                render: (data, type, row, meta) => (meta.row + 1)
+                            },
+                            { mData: 'Description' },
+                            {
+                                render: (data, type, row, meta) => {
+                                    return row.CreatedUserName;
+                                },
+                            },
+                            {
+                                render: (data, type, row, meta) => {
+                                    return moment(row.CreatedAt).zone('+0600').format("DD-MMM-YYYY HH:mm");
+                                },
+                            },
+                        ],
+                    });
+                },
+                error: function () {
+                    $(".loader").fadeOut("slow");
+                    swal(
+                        'Unexpected',
+                        'Unknown error occurred',
+                        'error'
+                    );
+                }
+            });
+        }
+    function showDeleteConfirmMessage(id) {
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this imaginary file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            var data = { 'id': id };
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/Client/Delete",
+                data: data,
+                datatype: "json",
+                success: function (result) {
+                    console.log(result);
+                    var message = result.Message;
+                    var executionState = result.executionState;
+                    if (executionState != null) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        $(".confirm").on('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrown) {
+                    swal("Not Deleted!", "Your imaginary file has not been deleted.", "error");
+                }
+            });
+        });
+    }
+    function getCommentHistory(clientId) {
+        var data = { 'clientId': clientId };
+        $("#commentHistoryModal").modal("show");
+        $.ajax({
+            type: "GET",
+            url: "/Client/GetClientCommentHistoryById",
+            data: data,
+            cache: false,
+            dataType: 'json',
+            success: function (response) {
+                $('#commentHistoryTableId').DataTable({
+                    "bDestroy": true,
+                    data: response.Data,
+                    aoColumns: [
+                        {
+                            title: 'Sl',
+                            data: null,
+                            render: (data, type, row, meta) => (meta.row + 1)
+                        },
+                        { mData: 'SenderName' },
+                        { mData: 'ReceiverName' },
+                        { mData: 'Remark' },
+                        // { mData: 'Description' },
+                        {
+                            render: (data, type, row, meta) => {
+                                return moment(row.CreatedAt).zone('+0600').format("DD-MMM-YYYY HH:mm");
+                            },
+                        },
+                    ],
+                });
+            },
+            error: function () {
+                $(".loader").fadeOut("slow");
+                swal(
+                    'Unexpected',
+                    'Unknown error occurred',
+                    'error'
+                );
+            }
+        });
+    }
+</script>

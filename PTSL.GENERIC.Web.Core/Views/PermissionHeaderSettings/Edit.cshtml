@@ -1,0 +1,458 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.PermissionSettings.PermissionHeaderSettingsVM
+@{
+   // ViewBag.Title = "Edit";
+    ViewBag.activeMenu = "Approval Settings";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/PermissionHeaderSettings/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Edit Permission Settings
+        </h4>
+       @*  <button class="ml-auto reset btn btn-sm" onclick="location.reload()">
+            <svg class="rotate180z" width="16" height="16" viewBox="0 0 32 32">
+                <path d="M25.95 7.65l.005-.004c-.092-.11-.197-.206-.293-.312c-.184-.205-.367-.41-.563-.603c-.139-.136-.286-.262-.43-.391c-.183-.165-.366-.329-.558-.482c-.16-.128-.325-.247-.49-.367c-.192-.14-.385-.277-.585-.406a13.513 13.513 0 0 0-.533-.324q-.308-.179-.625-.341c-.184-.094-.37-.185-.56-.27c-.222-.1-.449-.191-.678-.28c-.19-.072-.378-.145-.571-.208c-.246-.082-.498-.15-.75-.217c-.186-.049-.368-.102-.556-.143c-.29-.063-.587-.107-.883-.15c-.16-.023-.315-.056-.476-.073A12.933 12.933 0 0 0 6 7.703V4H4v8h8v-2H6.811A10.961 10.961 0 0 1 16 5a11.111 11.111 0 0 1 1.189.067c.136.015.268.042.403.061c.25.037.501.075.746.128c.16.035.315.08.472.121c.213.057.425.114.633.183c.164.054.325.116.486.178c.193.074.384.15.57.235c.162.072.32.15.477.23q.268.136.526.286c.153.09.305.18.453.276c.168.11.33.224.492.342c.14.102.282.203.417.312c.162.13.316.268.47.406c.123.11.248.217.365.332c.167.164.323.338.479.512A10.993 10.993 0 1 1 5 16H3a13 13 0 1 0 22.95-8.35z" fill="currentColor" />
+            </svg>
+            Reset
+        </button> *@
+    </div>
+
+    <div class="card-body">
+        @using (Html.BeginForm("", "", FormMethod.Post, new { id = "CommitteeManagementForm" }))
+        {
+            <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+            <input type="hidden" name="CreatedAt" id="CreatedAt" value="@Model.CreatedAt" />
+
+            <div id="CommunityTrainingForm" class="card-body mt-2 form-horizontal mt-2 gray-card">
+                <div class="row p-1 custom">
+                    <div class="p-2 col-12">
+
+                        <div class="row custom forest-location">
+                           
+
+                            <div class="col-6 p-1">
+                                <label class="m-0">Module Name <span style="color: red;">*</span></label>
+                                @Html.DropDownList("ModuleEnumId", null, "Choose Module Name", htmlAttributes: new { @class = "form-control col-md-12", @required = "required" })
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="row custom ">
+                            <div class="col-12 p-1">
+                                <fieldset class="p-2">
+                                    <legend class="float-none w-auto">Assigning Authority</legend>
+                                    <div class="row">
+                                        <div class="col-4 pr-1" style="max-width: 245px;">
+                                            <label class="m-0">User Role <span style="color: red;">*</span></label>
+                                            @Html.DropDownList("UserRoleId", null, "Choose User Role", htmlAttributes: new { @class = "form-control col-md-12" })
+                                        </div>
+
+                                        <div class="col-4 pr-1" style="max-width: 245px;">
+                                            <label class="m-0">Order No (IE: 123...) <span style="color: red;">*</span></label>
+                                            <input type="number" class="form-control col-md-12" id="OrderId" name="OrderId" value="" placeholder="Enter Order No" onkeyup="this.value = (parseFloat(this.value) > 0) ? this.value : ''">
+                                        </div>
+                                        <div class="col-4 pr-1" style="padding-top: 23px;">
+                                            <button style="background-color:forestgreen;float: left" class="btn btn-success btn-sm" type="button" onclick="addMore()"><i class="fa fa-plus">Add</i></button>
+                                        </div>
+                                    </div>
+                                    
+                                </fieldset>
+                            </div>
+                        </div>
+
+
+                        <div style="overflow-y:; margin-top: 20px; width: 100%">
+                            <table class="reportTable" id="grid" role="grid" aria-describedby="tableExport_filter_info" style="width: 100%;margin-left:5px">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="sorting_asc" tabindex="0" aria-controls="tableExport_filter" rowspan="1" colspan="1" aria-sort="ascending" aria-label="SL: activate to sort column descending" style="min-width: 50px;">SL NO</th>
+                                            <th class="sorting" tabindex="0" aria-controls="tableExport_filter" aria-label="Forest Department: activate to sort column ascending" style="min-width: 80px;">User Role</th>
+                                            <th class="sorting" tabindex="0" aria-controls="tableExport_filter" aria-label="Forest Beat: activate to sort column ascending" style="min-width: 95px;">Order No</th>
+                                            <th class="sorting" tabindex="0" aria-controls="tableExport_filter" aria-label="Comment: activate to sort column ascending" style="min-width: 50px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                       
+                                        @{
+                                            var count = 1;
+                                        }
+                                        @foreach (var member in Model.PermissionRowSettings!.Where(x => x.IsDeleted == false))
+                                        {
+                                            <tr role="row" class="trClass" data-id="@member.Id">
+                                                <td class="sorting_1">@count</td>
+                                                <td class="sorting_1">@member.UserRole?.RoleName</td> 
+                                                <td class="sorting_1">@member?.OrderId</td>
+                                                <td>
+                                                    <div>
+                                                        <button type="button" style="background-color:red" class="btn btn-danger btn-sm" onclick="deleteItem(@member.Id)">Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            count = count + 1;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="d-flex justify-content-end mt-2">
+                            <button type="button" onclick="submitFormData()" id="SaveExecutiveCommittee" class="btn btn-md btn-green mr-2">
+                                @*<i class="fa fa-save mr-2"></i>*@Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        }
+    </div>
+   
+</div>
+<script>
+
+
+    $(".submit-btn").on("click", function () {
+        if ($("#Form").valid()) {
+            $(".loader").fadeIn("slow");
+        }
+    });
+    
+
+
+    $("#CellNo").keyup(function () {
+        $("#CellNo").val(this.value.match(/[0-9]*/));
+    });
+
+
+    $(document).ready(function () {
+
+        itemDetails = [];
+        
+        
+        document.getElementById("ModuleEnumId").disabled = true;
+        
+
+    });
+
+    
+</script>
+
+
+
+
+<!--New Edit-->
+
+
+<script>
+    var count = 1;
+    var itemDetails = [];
+
+    function addMore(event) {
+       
+        var authorityUserRoleText = $("#UserRoleId :selected").text();
+        var authorityUserRoleValue = $("#UserRoleId").val();
+
+       // var authorityUserText = $("#AuthorityUserId :selected").text();
+       // var authorityUserValue = $("#AuthorityUserId").val();
+
+        var OrderValue = $("#OrderId").val();
+
+        if (OrderValue == "") {
+            alert("Order No Not Set!");
+            return;
+        }
+
+
+
+
+        var isUserExist = itemDetails.find(x => x.UserRoleId == authorityUserRoleValue);
+        if (count > 1) {
+            if (isUserExist !== undefined) {
+                alert("Alredy Role Added!");
+                return;
+            }
+        }
+
+        var isUserExistOrderNo = itemDetails.find(x => x.OrderId == OrderValue);
+        if (count > 1) {
+            if (isUserExistOrderNo !== undefined) {
+                alert("Alredy Order No Added!");
+                return;
+            }
+        }
+
+        if (authorityUserRoleValue.length <= 0) {
+            alert("Please Select User Role!");
+            return;
+        }
+
+        //if (authorityUserValue.length <= 0) {
+        //    alert("Please Select User Name!");
+        //    return;
+        //}
+
+
+
+        var gridCheckOrderNo = $("#grid tbody tr").find(`td[data-OrderId=${Number(OrderValue)}]`).text();
+        
+
+        if (gridCheckOrderNo != "") {
+            alert("Alredy Same Order No Added!");
+            return;
+        }
+
+
+
+
+        
+  
+        //event.preventDefault();
+        var tbody = $("#tbody");
+
+        tbody.append(`
+                                         <tr role="row" class="trClass" data-id="${count}">
+                                                    <td class="Id">${count}</td>
+                                                    <td data-authorityUserRoleId="${authorityUserRoleValue}" class="AuthorityUserRoleId">${authorityUserRoleText}</td>
+                                                    <td data-OrderId="${OrderValue}" class="OrderId">${OrderValue}</td>
+                                                    <td>
+                                                        <div>
+                                                                <button style="background-color:red" class="btn btn-danger btn-sm" onclick="removeItem(${count})">Remove</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                   `);
+
+        //console.log(BeneficiaryInfo);
+
+        var fkId = parseInt($("#Id").val());
+
+       
+        itemDetails.push({
+            Count: count,
+            UserRoleId: authorityUserRoleValue,
+            //UserId: authorityUserValue,
+            OrderId: OrderValue
+        });
+
+        count = count + 1;
+
+    }
+
+
+    //save data
+
+    function submitFormData(event) {
+
+        // Validate
+       
+        // var isFormValid = $("#CommitteeManagementForm").valid();
+        // if (isFormValid == false) {
+        //     return;
+        // }
+
+
+        var fkId = parseInt($("#Id").val());
+
+       
+        //event.preventDefault();
+        // alert("Test save");
+
+        var formData = new FormData();
+
+        formData.append('Id', fkId);
+        
+
+
+        var PermissionRowSettings = itemDetails.filter(Boolean);
+        formData.append('PermissionRowSettings', JSON.stringify(PermissionRowSettings));
+
+        console.log(formData);
+        ////var Id = $("#VisaPolicyConfigurationId").val();
+
+
+        $.ajax({
+            type: "POST",
+            url: "/PermissionHeaderSettings/Edit",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function (response) {
+                window.location.href = "/PermissionHeaderSettings/Index";
+                //location.reload();
+            }
+        });
+
+    }
+
+</script>
+
+<script>
+    function deleteItem(id) {
+        //alert(id);
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/PermissionHeaderSettings/DeleteMemberById",
+            data: { "id": id },
+            success: function (data) {
+                //alert("Success");
+                //location.reload();
+                $("#grid tbody").find(`tr[data-id=${data.Data.Id}]`).remove();
+
+                alert("Assigning Authority Successfully Deleted!");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve data.');
+            }
+        });
+
+
+
+    }
+
+    function removeItem(id) {
+         for (var i = 0; i < itemDetails.length; i++) {
+            if (itemDetails[i].Count === id) {
+                itemDetails.splice(i, 1);
+                //break;
+            }
+        }
+        //alert(id);
+        $(`[data-id=${id}]`).remove();
+
+    }
+</script>
+
+<script>
+    $("#DesignatinId").on("change", function () {
+
+        var committeeTypeId = parseInt($("#CommitteeTypeId").val());
+        var subCommitteeId = parseInt($("#DesignatinId").val());
+
+        var committeeData = {
+            "committeeType": committeeTypeId,
+            "subCommitteeType": subCommitteeId
+        }
+
+        var committeeDesignationId = $("#CommitteeDesignationId");
+
+        $.ajax({
+            type: "POST",
+            url: "/CommitteeManagement/GetDesignationByDesigOrSubDesigId",
+            data: committeeData,
+            cache: false,
+            dataType: 'json',
+            success: function (response) {
+                //alert("success");
+                $("#CommitteeDesignationId > option").remove();
+                committeeDesignationId.append($('<option></option>').val("").html("Select Designation")); 
+                $.each(response.Entity, function (id, option) {
+                    committeeDesignationId.append($('<option></option>').val(option.Id).html(option.Name));
+                });
+            },
+            error: function () {
+                $(".loader").fadeOut("slow");
+
+                swal(
+                    'Unexpected',
+                    'Unknown error occurred',
+                    'error'
+                );
+            }
+        });
+
+        $('#SubCommitteeDesignationId').show();
+        $('#lblSubDesignation').show();
+        var designatinId = $("#DesignatinId").val();
+
+        $('#SubCommitteeDesignationId').children().remove().end()
+            .append('<option selected value="">Choose Sub Designation</option>');
+
+
+        //alert(designatinId);
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Dropdown/ListBySubCommitteeType",
+            data: { "id": designatinId },
+            success: function (data) {
+
+                // $(".loader").fadeOut("slow");
+                console.log(data);
+                // designatinId.html('<option value="">Choose..</option>');
+
+                $.each(data, function (i, item) {
+                    $('#SubCommitteeDesignationId').append($('<option>', {
+                        value: item.Id,
+                        text: item.Name
+                    }));
+                });
+
+                //$.each(data, function (id, option) {
+                //    SubCommitteeDesignationId.append($('<option></option>').val(option.Id).html(option.Name || option.NameBn));
+                //});
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert('Failed to retrieve data.');
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $.validator.addMethod(
+        'dateMustBeGreaterThanStart',
+        function (value, element, requiredValue) {
+            return dateMustBeGreaterThanStartDateFunc(value);
+        },
+        'Date must be greater or equal to start date.'
+    );
+
+    const dateMustBeGreaterThanStartDateFunc = date => {
+        var startDate = $("#CommitteeFormDate").val();
+
+        return (new Date(date)).toISOString() >= (new Date(startDate)).toISOString();
+    }
+
+
+    document.getElementById("CommitteeTypeConfigurationId").disabled = true;
+    document.getElementById("CommitteesConfigurationId").disabled = true;
+
+</script>
+
+
+<script>
+    $("#AuthorityUserRoleId").change(function () {
+        var selectedItem = $(this).val();
+        var authorityUserId = $("#AuthorityUserId");
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/PermissionHeaderSettings/GetUserNameByUserRoleId",
+            data: { "userRoleId": selectedItem },
+            success: function (data) {
+
+                $("#AuthorityUserId > option").remove();
+                authorityUserId.html('<option value="">Choose..</option>');
+
+                $.each(data, function (id, option) {
+                    authorityUserId.append($('<option></option>').val(option.Id).html(option.UserName));
+                });
+                //PresentUpazillaId.prop("disabled", false);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+
+            }
+        });
+    });
+</script>

@@ -1,0 +1,478 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.AdminDashBoardVM
+@{
+    ViewBag.Title = "Dashboard";
+     Layout = "_Layout";
+     ViewBag.activeMenu = "Dashboard";
+}
+
+@section Styles {
+    <style>
+        .section-body {
+            background-color: transparent !important;
+        }
+    </style>
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<link href="~/dashboard/dashboard.css" rel="stylesheet" />
+
+
+
+<div class="row prow">
+    <div class="col-xl-4 pr">
+        <div class="part-two-left-box">
+            <div class="box-content">
+                <img src="~/dashboard/img/search.svg" alt="">
+                <div class="content-desc">
+                    <h4>Hi, @Model.UserName</h4>
+                    <p>Welcome to SQTC Management System</p>
+                </div>
+            </div>
+            <img class="shape-img" src="~/dashboard/img/shape.png" alt="">
+        </div>
+
+        <div class="project-statistics">
+            <div class="project-statistics-header d-flex justify-content-between align-items-center">
+                <h6>Project Statistics</h6>
+                <a href="#">View All</a>
+            </div>
+            <div class="projects-sts-content">
+                <div class="project-statistics-left">
+                    <div class="progress-circle"></div>
+                    <div class="sts-content">
+                        <h6>Hardware Testing</h6>
+                        <p>workability Testing</p>
+                    </div>
+                </div>
+                <div class="project-statistics-right">
+                    <div class="avatar">
+                        <ul>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                        </ul>
+                    </div>
+                    <div class="avatartime">
+                        2 days left
+                    </div>
+                </div>
+            </div>
+            <div class="projects-sts-content">
+                <div class="project-statistics-left">
+                    <div class="progress-circle"></div>
+                    <div class="sts-content">
+                        <h6>Hardware Testing</h6>
+                        <p>workability Testing</p>
+                    </div>
+                </div>
+                <div class="project-statistics-right">
+                    <div class="avatar">
+                        <ul>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                            <li><img src="~/dashboard/img/avatar.png" alt=""></li>
+                        </ul>
+                    </div>
+                    <div class="avatartime">
+                        2 days left
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-summary">
+            <div class="project-statistics-header d-flex justify-content-between align-items-center">
+                <h6>Ongoing Task Summary</h6>
+                <a href="/Task/Index">View All</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table task-summary-table">
+                    <thead>
+                        <tr>
+                            <th>Task Name</th>
+                            <th>Employee Name</th>
+                            <th>Timeline</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TaskOfProjects != null)
+                        {
+                            foreach (var data in Model.TaskOfProjects)
+                            {
+                                <tr>
+
+                                    <td>@data.TaskTitle</td>
+                                    <td>@data.User?.UserName</td>
+                                    <td>@data.TaskDeadline.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <div class="status completed">
+                                            @data.TaskOfProjectStatus
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="project-overview">
+            <h2>Project Overview</h2>
+            <h6>(Based on Contract Rate)</h6>
+        </div>
+    </div>
+    <div class="col-xl-8 plr">
+        <div class="row prow">
+            <div class="col-lg-8 pr">
+                <div class="row align-items-center">
+                   @*  <div class="col-lg-6 pr">
+                        <div class="test-calender-left-box">
+                            <img src="~/dashboard/img/test1.svg" alt="">
+                            <div class="test-calender-left-box-content">
+                                <h6>@Model.totaltestRequest </h6>
+                                <p>Total Test Request</p>
+                            </div>
+                        </div>
+                    </div> *@
+                    <div class="col-lg-6">
+                        <div class="test-calender-left-box blue-test">
+                            <img src="~/dashboard/img/3dots.svg" alt="">
+                            <div class="test-calender-left-box-content white-box-content">
+                                <h6>@Model.PendingProjectRequests</h6>
+                                <p>Pending Test Requests</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 pr">
+                        <div class="test-calender-left-box blue-test">
+                            <img src="~/dashboard/img/check.svg" alt="">
+                            <div class="test-calender-left-box-content white-box-content">
+                                <h6>@Model.TotalRegistredClients</h6>
+                                <p>Total Registered Clients</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="test-calender-left-box">
+                            <img src="~/dashboard/img/user.svg" alt="">
+                            <div class="test-calender-left-box-content">
+                                <h6>@Model.TotalEmployees</h6>
+                                <p>Total Employees</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 pr">
+                        <div class="test-calender-left-box blue-test">
+                            <img src="~/dashboard/img/ddd.svg" alt="">
+                            <div class="test1-calender-left-box-content white-box-content">
+                                <h6>@Model.TotalAgreements</h6>
+                                <p>Total Agreement</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="test-calender-left-box blue-test">
+                            <img src="~/dashboard/img/complete.svg" alt="">
+                            <div class="test-calender-left-box-content white-box-content">
+                                <h6>@Model.TotalCompletedProjects</h6>
+                                <p>Total Completed Projects</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row prow">
+                    <div class="col-12 plr">
+                        <div class="client-payment">
+                            <h4>Client Payment Overview</h4>
+
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="client-payment-thead">
+                                        <tr>
+                                            <th>Client Name</th>
+                                            <th>Date</th>
+                                            <th>Testing Type</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.paymentInformation != null)
+                                        {
+                                            foreach (var data in Model.paymentInformation)
+                                            {
+                                                if(data.PaymentInformation.Count != 0)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <div class="client-info">
+                                                                <div class="client-img">
+                                                                    <img class="img" src="~/dashboard/img/avatar.png" alt="">
+                                                                    <img class="img-icon" src="~/dashboard/img/icon2.png" alt="">
+                                                                </div>
+                                                                <div class="client-desc">
+                                                                    <h6>Receive money from</h6>
+                                                                    @data.ProjectRequest.Client?.ClientName
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="amount">
+                                                                @data.PaymentInformation?.LastOrDefault().CreatedAt.ToString("dd/MM/yyyy")
+
+                                                            </div>
+
+                                                        <td>
+                                                            <div class="testing-type">
+                                                                    @data.ProjectRequest?.ProjectType
+                                                            </div>
+                                                        </td>
+                                                        <td>
+
+                                                            <div class="amount">
+                                                                    @data.PaymentInformation?.LastOrDefault().PaymentAmount
+                                                            </div>
+
+
+                                                        </td>
+
+                                                        <td>
+
+                                                                @if (data.PaymentInformation?.LastOrDefault().Reconciliations.Count() > 0)
+                                                                {
+                                                                    if (data.PaymentInformation.LastOrDefault().Reconciliations.LastOrDefault().IsPaymentApproved == true)
+                                                                    {
+                                                                    <div class="status review">
+                                                                        Paid
+                                                                    </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <div class="status review">
+                                                                        Failed
+                                                                    </div>
+
+                                                                    }
+
+                                                                }
+                                                                else
+                                                                {
+                                                                <div class="status review">
+                                                                    Pending
+                                                                </div>
+                                                                }
+
+
+
+
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                           
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 plr">
+                <div class="test-calender-right">
+                    <div class="test-calender-right-calender" style="padding-bottom:10px;font-weight: 500;">
+                        Calender @* <input type="date" id="meetingDate" style="width:28px" /> *@
+
+                        <div class="row">
+                            <div class="col-md-12" style="padding: 0;margin: 0;">
+                                <div class="calendar calendar-first" id="calendar_first">
+                                    <div class="calendar_header">
+                                        <button class="switch-month switch-left"> <i class="fa fa-chevron-left"></i></button>
+                                        <h2></h2>
+                                        <button class="switch-month switch-right"> <i class="fa fa-chevron-right"></i></button>
+                                    </div>
+                                    <div class="calendar_weekdays"></div>
+                                    <div id="meetingDate" class="calendar_content"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="test-calender-meeting">
+                        <div class="test-calender-meeting-header d-flex justify-content-between align-items-center">
+                            <h6>Activity/Meetings</h6>
+                            <a href="/Meeting/Index">View All</a>
+                        </div>
+                        <div id="meetings-container" style="margin-left: -20px;margin-right: -20px;">
+                            @if (Model.MetingInformation != null)
+                            {
+                                foreach (var item in Model.MetingInformation)
+                                {
+                                    <div class="meeting-card">
+                                        <div class="meeting-logo">EK</div>
+                                        <div class="meeting-desc">
+                                            <h6>@item.MeetingTitle @* has a meeting *@</h6>
+                                            <p>@item.MeetingStartTime</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row prow">
+            <div class="col-12 plr">
+                <div class="requestsignining">
+                    Request Vs Agreement Signing
+                </div>
+            </div>
+        </div>
+        <div class="card-body" style="background-color:white;margin-top: 27px;">
+            <canvas id="myChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Extract data from the HTML
+        const totalTestRequest = document.querySelector('.test-calender-left-box-content h6').textContent.trim();
+        const totalAgreement = document.querySelector('.blue-test .test1-calender-left-box-content h6').textContent.trim();
+
+        // Convert the data to numbers
+        const totalTestRequestValue = Number(totalTestRequest);
+        const totalAgreementsValue = Number(totalAgreement);
+
+        // Generate the chart using Chart.js
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar', // Type of chart: 'line', 'bar', 'pie', etc.
+            data: {
+                labels: ['Total Test Request', 'Total Agreement'], // Labels for the data points
+                datasets: [{
+                    label: 'Data Summary',
+                    data: [totalTestRequestValue, totalAgreementsValue], // Data values extracted from the div elements
+                    backgroundColor: [
+                        'color: #27538A;',
+                        'color: #168220;'
+                    ],
+                    borderColor: [
+                        'rgba(39, 83, 138, 1)',
+                        'rgba(4, 80, 11, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+
+   
+
+    $(document).ready(function () {
+        debugger;
+        $('#meetingDate').on('apply.daterangepicker', function (ev, picker) {
+           
+            alert('hello');
+        });
+    });
+   @*  $("#meetingDate").on("change", function () {
+       
+        const value = $(this).val();
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Meeting/MeetingListByDate?date=" + value,
+            success: function (response) {
+                displayMeetings(response);
+            },
+            error: function (error) {
+                console.error("Error fetching meetings:", error);
+                $("#meetings-container").html("<p>Error fetching meetings. Please try again later.</p>");
+            }
+        });
+    }); *@
+
+    // Function to display meetings in the container
+    function displayMeetings(meetings) {
+        var container = $("#meetings-container");
+        container.empty(); // Clear previous meetings
+
+        if (meetings != null) {
+            meetings.Data.forEach(function (meeting) {
+               
+                var meetingCard = `
+                            <div class="meeting-card">
+                                <div class="meeting-logo">EK</div>
+                                <div class="meeting-desc">
+                                    <h6>${meeting.MeetingTitle}</h6>
+                                    <p>${meeting.MeetingStartTime}</p>
+                                </div>
+                            </div>
+                        `;
+                container.append(meetingCard);
+                console.log(container);
+            });
+        } else {
+           
+            container.append("<p>No meetings scheduled for this date.</p>");
+        }
+    }
+</script>
+
+
+<script>
+    function getDateRange(firstDate, lastDate) {
+        debugger; // new Date("2015-03-25");
+        firstDateMonth = firstDate.month + 1;
+        lastDateMonth = lastDate.month + 1;
+
+        const firstDateCon = String(firstDate.year + "-" + firstDateMonth + "-" +firstDate.date);
+        const lastDateCon = String(lastDate.year + "-" + lastDateMonth + "-" + lastDate.date);
+
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Meeting/MeetingListByDate?firstDate=" + firstDateCon + "&lastDate=" + lastDateCon,
+            success: function (response) {
+                displayMeetings(response);
+            },
+            error: function (error) {
+                console.error("Error fetching meetings:", error);
+                $("#meetings-container").html("<p>Error fetching meetings. Please try again later.</p>");
+            }
+        });
+
+
+
+       @* alert(firstDate); *@
+    }
+</script>
+

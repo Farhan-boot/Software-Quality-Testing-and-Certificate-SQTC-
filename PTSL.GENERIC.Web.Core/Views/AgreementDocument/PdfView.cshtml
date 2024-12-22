@@ -1,0 +1,83 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="card">
+
+    <div class="card-header">
+        <h4>
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+        <h1>PDF.js 'Hello, world!' example</h1>
+
+        <p>Please use <a href="https://mozilla.github.io/pdf.js/getting_started/#download"><i>official releases</i></a> in production environments.</p>
+
+        <!-- <canvas id="the-canvas"></canvas> -->
+        <div id="pdf-container"></div>
+    </div>
+</div>
+
+
+<script src="//mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
+
+<script type="module">
+    // If absolute URL from the remote server is provided, configure the CORS
+    // header on that server.
+    var url = 'https://pdfobject.com/pdf/sample-3pp.pdf';
+
+    // Loaded via <script> tag, create shortcut to access PDF.js exports.
+    var { pdfjsLib } = globalThis;
+
+    // The workerSrc property shall be specified.
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
+
+    // Asynchronous download of PDF
+    var loadingTask = pdfjsLib.getDocument(url);
+    loadingTask.promise.then(function (pdf) {
+        // Fetch the first page
+        var pageNumber = pdf.numPages;
+        // Create a container to hold each page
+        var container = document.getElementById('pdf-container');
+
+        for (let i = 1; i <= pageNumber; i++) {
+            pdf.getPage(i).then(function (page) {
+                console.log('Page loaded');
+
+                var scale = 1.5;
+                var viewport = page.getViewport({ scale: scale });
+
+                // Prepare canvas using PDF page dimensions
+                // var canvas = document.getElementById('the-canvas');
+                // Create a canvas for each page
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+
+                // Append canvas to the container
+                container.appendChild(canvas);
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+                renderTask.promise.then(function () {
+                    console.log('Page rendered');
+                });
+            });
+        }
+
+
+
+    }, function (reason) {
+        // PDF loading error
+        console.error(reason);
+    });
+</script>

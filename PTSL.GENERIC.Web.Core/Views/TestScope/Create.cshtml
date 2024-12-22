@@ -1,0 +1,327 @@
+﻿@model PTSL.GENERIC.Web.Core.Model.EntityViewModels.HardwareTestings.TestScopeVM
+
+@{
+    // ViewBag.Title = "Create Test Cases";
+    // var Message = ViewBag.Message;
+}
+
+<style>
+    .add-participant-container {
+        display: flex;
+        justify-content: right;
+        align-items: end;
+    }
+
+    label.error {
+        color: red !important;
+    }
+
+</style>
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            <a href="/TestScope/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+            Create Test Steps
+        </h4>
+      @*   <button class="ml-auto reset btn btn-sm" onclick="location.reload()">
+            <svg class="rotate180z" width="16" height="16" viewBox="0 0 32 32">
+                <path d="M25.95 7.65l.005-.004c-.092-.11-.197-.206-.293-.312c-.184-.205-.367-.41-.563-.603c-.139-.136-.286-.262-.43-.391c-.183-.165-.366-.329-.558-.482c-.16-.128-.325-.247-.49-.367c-.192-.14-.385-.277-.585-.406a13.513 13.513 0 0 0-.533-.324q-.308-.179-.625-.341c-.184-.094-.37-.185-.56-.27c-.222-.1-.449-.191-.678-.28c-.19-.072-.378-.145-.571-.208c-.246-.082-.498-.15-.75-.217c-.186-.049-.368-.102-.556-.143c-.29-.063-.587-.107-.883-.15c-.16-.023-.315-.056-.476-.073A12.933 12.933 0 0 0 6 7.703V4H4v8h8v-2H6.811A10.961 10.961 0 0 1 16 5a11.111 11.111 0 0 1 1.189.067c.136.015.268.042.403.061c.25.037.501.075.746.128c.16.035.315.08.472.121c.213.057.425.114.633.183c.164.054.325.116.486.178c.193.074.384.15.57.235c.162.072.32.15.477.23q.268.136.526.286c.153.09.305.18.453.276c.168.11.33.224.492.342c.14.102.282.203.417.312c.162.13.316.268.47.406c.123.11.248.217.365.332c.167.164.323.338.479.512A10.993 10.993 0 1 1 5 16H3a13 13 0 1 0 22.95-8.35z" fill="currentColor" />
+            </svg>
+            Reset
+        </button> *@
+    </div>
+    <div style="padding-left: 15px; padding-right: 15px;">
+
+        <form id="TestScopeForm" class="card-body mt-2 gray-card">
+
+            <div class="row p-1 custom ">
+                <div class="p-2 col-12">
+
+                    <div class="row custom">
+                        <div class="col-6 p-1">
+                            <label class="m-0">Project <span style="color: red;">*</span></label>
+                            @Html.DropDownList("ProjectRequestId", null, "Choose Project", htmlAttributes: new { @class = "form-control col-md-12", @required = "required" })
+                        </div>
+                        <div class="col-6 p-1">
+                            <label class="m-0">Task <span style="color: red;">*</span></label>
+                            @Html.DropDownList("TaskOfProjectId", null, "Choose Task", htmlAttributes: new { @class = "form-control col-md-12", @required = "required" })
+                        </div>
+                    </div>
+
+                    <div class="row custom ">
+                        <div class="col-12 p-1">
+                            <fieldset class="p-2">
+                                <legend class="float-none w-auto">Test Scope Details</legend>
+                                <div class="row">
+                                    <div class="col-6 pr-1" style="max-width: 245px;">
+                                        <label class="m-0">Test Item <span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control col-md-12" id="TestItem" name="TestItem" value="" placeholder="Enter Test Item" required>
+                                    </div>
+                                    <div class="col-6 pr-1" style="max-width: 245px;">
+                                        <label class="m-0">TenderID<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control col-md-12" id="TenderID" name="TenderID" value="" placeholder="Enter Tender ID" required>
+                                    </div>
+                                    <div class="col-6 pr-1" style="max-width: 400px;">
+                                        <label class="m-0">Description<span style="color: red;">*</span></label>
+                                        <textarea type="text" class="form-control col-md-12" id="Description" name="Description" value="" placeholder="Enter Description" required></textarea>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button style="background-color:forestgreen;float: right" class="btn btn-success btn-sm" type="button" onclick="addMore()">Add Test Step</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="row mt-2" style="padding: 10px;">
+                            <div style="overflow-y: scroll;">
+                                <table class="reportTable" id="grid" role="grid" aria-describedby="tableExport_filter_info" style="width: 1018px;">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="sorting_asc" tabindex="0" aria-controls="tableExport_filter" rowspan="1" colspan="1" aria-sort="ascending" aria-label="SL: activate to sort column descending" style="min-width: 50px;">SL NO</th>
+                                            <th class="sorting" tabindex="0" aria-controls="tableExport_filter" aria-label="Project: activate to sort column ascending" style="min-width: 80px;">Project</th>
+                                            <th class="sorting" tabindex="0" aria-controls="tableExport_filter" aria-label="Task: activate to sort column ascending" style="min-width: 95px;">Task</th>
+                                            <th class="sorting" tabindex="0" aria-controls="tableExport_filter" aria-label="Test Step: activate to sort column ascending" style="min-width: 95px;">Test Item</th>
+                                            <th class="sorting" tabindex="0" aria-controls="tableExport_filter" aria-label="Test Data: activate to sort column ascending" style="min-width: 95px;">Tender Id</th>
+                                            <th class="sorting" tabindex="0" aria-controls="tableExport_filter" aria-label="Action: activate to sort column ascending" style="min-width: 50px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+
+
+        <div class="d-flex justify-content-end mt-2">
+            <button type="button" onclick="submitFormData()" class="btn btn-sm btn-green btn-submit mr-2">
+            Save
+            </button>
+        </div>
+        @* }*@
+    </div>
+
+
+    <div class="card-header pull-left">
+        <!--  <a href="/ExecutiveCommittee/Index" class="btn btn-warning">Return to Index</a> -->
+    </div>
+
+</div>
+
+<script>
+    $(".submit-btn").on("click", function () {
+        if ($("#Form").valid()) {
+            var valCell = $("#CellNo").val();
+            alert(valCell);
+        }
+    });
+    
+
+    $("#TestScopeForm").validate({
+       
+        rules: {
+            ProjectRequestId: {
+                required: true
+            },
+            TaskOfProjectId: {
+                required: true
+            },
+            TestItem: {
+                required: true
+            },
+            TenderID: {
+                required: true
+            },
+        },
+
+    });
+</script>
+
+
+<script>
+    var count = 1;
+    $("#OrderId").val(count);
+    var itemDetails = [];
+    function addMore(event) {
+       
+        if (!$("#TestScopeForm").valid()) {
+            return;
+        }
+        var projectName = $("#ProjectRequestId :selected").text();
+        var ProjectRequestId = $("#ProjectRequestId").val();
+        var taskName = $("#TaskOfProjectId :selected").text();
+        var TaskOfProjectId = $("#TaskOfProjectId").val();
+        var TestItem = $("#TestItem").val();
+        var TenderID = $("#TenderID").val();
+        var Description = $("#Description").val();
+        var tbody = $("#tbody");
+
+        tbody.append(`
+                                 <tr role="row" class="trClass" data-id="${count}">
+                                            <td class="Id">${count}</td>
+                                                                                <td data-designation="${ProjectRequestId}" class="UserRoleId">${projectName}</td>
+                                                                                <td class="CaseDescription">${taskName}</td>
+                                                                                <td class="TestCaseName">${TestItem}</td>
+                                                                                <td class="TestResultName">${TenderID}</td>
+                                            <td>
+                                                <div>
+                                                        <button style="background-color:red" class="btn btn-danger btn-sm" onclick="removeItem(${count})">Remove</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                           `);
+
+        itemDetails.push({
+            //Id: id,
+             Count: count,
+             ProjectRequestId: ProjectRequestId,
+             TaskOfProjectId: TaskOfProjectId,
+             TestItem: TestItem,
+             TenderID: TenderID,
+             Description: Description,
+        });
+
+        count = count + 1;
+        //Refresh Form
+        $("#TestItem").val("");
+        $("#TenderID").val("");
+        $("#Description").val("");
+
+    }
+
+</script>
+
+<script>
+
+
+    function removeItem(id) {
+        for (var i = 0; i < itemDetails.length; i++) {
+            if (itemDetails[i].Count === id) {
+                itemDetails.splice(i, 1);
+                //break;
+            }
+        }
+        //alert(id);
+        $(`[data-id=${id}]`).remove();
+
+        var orderNo = $("#OrderId").val();
+
+        $("#OrderId").val(orderNo - 1);
+        count = count - 1;
+
+        $('#grid > tbody  > tr').each(function (index, tr) {
+
+            //console.log(this.cells[5].innerText);
+
+            //if(this.cells[5].innerText == "Male")
+            //{
+            //  mailCount++;
+            //}
+            //if(this.cells[5].innerText == "Female")
+            //{
+            //  femailCount++;
+            //}
+        });
+
+    }
+
+
+
+    function submitFormData(event) {
+        // var isFormValid = $("#TestScopeForm").valid();
+        // if (isFormValid == false) {
+        //     return;
+        // }
+
+       
+
+        var formData = new FormData();
+
+        formData.append('ProjectRequestId', $("#ProjectRequestId").val());
+        formData.append('TaskOfProjectId', $("#TaskOfProjectId").val());
+
+        if (itemDetails.length <= 0) {
+            alert("Please Add minimum one Test Case !");
+            return;
+        }
+        var TestScopes = itemDetails.filter(Boolean);
+        formData.append('TestScopes', JSON.stringify(TestScopes));
+
+        console.log(formData);
+        ////var Id = $("#VisaPolicyConfigurationId").val();
+
+
+        $.ajax({
+            type: "POST",
+            url: "/TestScope/Create",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function (response) {
+                if (response.Data.length === 0) {
+                    //window.location.href = "/PermissionHeaderSettings/Create";
+                    alert("Module already exists!");
+                }
+                else {
+                    window.location.href = "/TestScope/Index";
+                }
+                //location.reload();
+            }
+        });
+    }
+
+
+
+
+</script>
+
+
+<script>
+    $("#ProjectRequestId").change(function () {
+       
+        var selectedItem = $(this).val();
+        var TaskList = $("#TaskOfProjectId");
+        var TestCaseList = $("#TestCaseId");
+        if (selectedItem == "" || selectedItem == null) {
+            return true;
+        }
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Task/GetTaskListsByProJectId",
+            data: { "id": selectedItem },
+            success: function (data) {
+               
+                console.log(data);
+                TaskList.html('<option value="">Choose..</option>');
+                $.each(data, function (id, option) {
+                    TaskList.append($('<option></option>').val(option.Id).html(option.TaskTitle));
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve data.');
+            }
+        });
+    });
+
+    
+</script>

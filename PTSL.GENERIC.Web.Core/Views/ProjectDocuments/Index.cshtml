@@ -1,0 +1,150 @@
+﻿@model IEnumerable<PTSL.GENERIC.Web.Core.Model.EntityViewModels.Documents.DocumentsByTypeVM>
+@{
+    //ViewBag.Title = "Test Project Requests";
+    ViewBag.activeMenu = "Uploaded Documents";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-md-10">
+                    <h4>Uploaded Project Documents</h4>
+                </div>
+                <div class="col-md-2 text-right">
+                    @* @if (@ViewBag.HasCreatePermission)
+                    {
+                    } *@
+                    <a href="/ProjectDocuments/Create" class="badge badge-success badge-shadow"><img src="/img/plus-vector.png">Add New</a>
+                </div>
+            </div>
+
+             <div class="card-body">
+                <div class="table-responsive mt-2 green-card">
+                    <form action="Search" class="form-horizontal">
+                        <div class="col-md-12">
+                            <div class="row custom">
+                                <div class="form-group col-md-4" style="max-width: 550px;">
+                                    <label class="m-0">Project <span style="color: red;"></span></label>
+                                    @Html.DropDownList("ProjectRequestId", null, "Choose Project", htmlAttributes: new { @class = "form-control col-md-12" })
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label class="m-0">Document Category <span style="color: red;"></span></label>
+                                    @Html.DropDownList("DocumentCategoriesId", null, "Choose Documeny Category", htmlAttributes: new { @class = "form-control col-md-12" })
+                                </div>
+                                <div class="col-3 pr-1" style="max-width: 500px;">
+                                    <label for="DocumentTitle" class="m-0">Document Title</label>
+                                    <input type="text" class="form-control col-md-12" id="DocumentTitle" name="DocumentTitle" value="@ViewBag.DocumentTitle" placeholder="Enter Document Name" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <button id="submit" class="btn btn-primary submit-btn pull-right btn-sm">Search</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="projectDocumentsTableId" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Project Name</th>
+                                <th>Document Category</th>
+                                <th>Document Module</th>
+                                <th>Document Title</th>
+                                <th>Download Document</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int i = 1;
+                        }
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var data in Model)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data.ProjectRequest?.ProjectName</td>
+                                        <td>@data.DocumentCategories?.Name</td>
+                                        <td>@data.DocumentModuleType</td>
+                                        <td>@data.DocumentTitle</td>
+                                        <td><a class="d-block" target="_blank" href="@data.DoumentPath">Download</a></td>
+                                        <td>
+                                            <button onclick="showDeleteConfirmMessage(@data.Id)" class="btn btn-icon" title="Delete"><img src="~/img/delete.png" /></button>
+                                            <a href="/ProjectDocuments/Details?id=@data.Id&returnUrl=/ProjectDocuments/Index" class="btn btn-icon" title="Details"><img src="~/img/view.png" /></a>
+
+                                            @* <a href="/ProjectDocuments/Edit?id=@data.Id" class="btn btn-primary btn-sm">Edit</a> *@
+
+
+                                            @* @if (ViewBag.HasEditDeletePermission)
+                                            {
+                                                <a href="/ProjectRequest/Edit?id=@data.Id&&returnUrl=/ProjectRequest/Index" class="btn btn-primary btn-sm">Edit</a>
+                                            } *@
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#projectDocumentsTableId').DataTable({
+            pageLength: 5
+        });
+    });
+
+
+    function showDeleteConfirmMessage(id) {
+        swal({
+            title: "Are you sure?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function () {
+            var data = { 'id': id };
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "/ProjectDocuments/Delete",
+                data: data,
+                datatype: "json",
+                success: function (result) {
+                    // console.log(result);
+                    // var message = result.Message;
+                    // var executionState = result.executionState;
+                    if (result.Success == true) {
+                        swal("Deleted!", "Your document has been deleted.", "success");
+                        $(".confirm").on('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, errorthrown) {
+                    swal("Not Deleted!", "Your document has not been deleted.", "error");
+                }
+            });
+        });
+    }
+    
+</script>
